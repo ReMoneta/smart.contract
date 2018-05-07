@@ -38,5 +38,7 @@ contract CrowdsaleAgent is Agent {
         public onlyCrowdsale();
 
     function onStateChange(Crowdsale.State _state) public onlyCrowdsale();
+
+    function onRefund(address _contributor, uint256 _tokens) public onlyCrowdsale() returns (uint256 burned);
 }
 

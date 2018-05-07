@@ -79,5 +79,13 @@ contract MintableCrowdsaleBonusOnCollectedWeiAgent is CrowdsaleAgent {
             token.disableMinting();
         }
     }
+
+    /// @notice Takes actions on refund
+    function onRefund(address _contributor, uint256 _tokens) public onlyCrowdsale() returns (uint256 burned) {
+        _contributor = _contributor;
+        _tokens = _tokens;
+        burned = burned;
+        // TODO: add impl
+    }
 }
 

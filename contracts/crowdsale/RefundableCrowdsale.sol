@@ -15,7 +15,6 @@ import './HardCappedCrowdsale.sol';
 /// with hard and soft limits
 contract RefundableCrowdsale is HardCappedCrowdsale {
 
-
     using SafeMath for uint256;
 
     uint256 public softCap;
@@ -52,8 +51,8 @@ contract RefundableCrowdsale is HardCappedCrowdsale {
         State state = super.getState();
 
         if (state == State.Success) {
-            if (tokensSold >= softCap) {
-                return State.Success;
+            if (tokensSold < softCap) {
+                return State.Refunding;
             }
         }
 
@@ -70,15 +69,6 @@ contract RefundableCrowdsale is HardCappedCrowdsale {
         internalRefund(_address);
     }
 
-    /// @notice auto refund to all contributors
-    function autoRefund(uint256 _from, uint256 _till) public {
-        require(contributors.length > _from && contributors.length < _till);
-
-        for (uint256 i = _from; i < _till; i++) {
-            internalRefund(contributors[i]);
-        }
-    }
-
     function internalContribution(address _contributor, uint256 _wei) internal {
         require(block.timestamp >= startDate && block.timestamp <= endDate);
 
@@ -92,8 +82,7 @@ contract RefundableCrowdsale is HardCappedCrowdsale {
         (tokens, tokensExcludingBonus, bonus) = pricingStrategy.getTokens(
             _contributor, tokensAvailable, tokensSold, _wei, collectedWei);
 
-        require(tokens < tokensAvailable);
-        require(hardCap > tokensSold.add(tokens));
+        require(tokens < tokensAvailable && tokens > 0 && hardCap > tokensSold.add(tokens));
 
         tokensSold = tokensSold.add(tokens);
 
@@ -102,7 +91,7 @@ contract RefundableCrowdsale is HardCappedCrowdsale {
         // transfer only if softcap is reached
         if (tokensSold >= softCap) {
             if (msg.value > 0) {
-                contributionForwarder.forward.value(msg.value)();
+                contributionForwarder.forward.value(this.balance)();
             }
         } else {
             // store contributor if it is not stored before
@@ -111,24 +100,25 @@ contract RefundableCrowdsale is HardCappedCrowdsale {
             }
             contributorsWei[_contributor] = contributorsWei[_contributor].add(msg.value);
         }
-
+        crowdsaleAgent.onContribution(_contributor, _wei, tokens, bonus);
         Contribution(_contributor, _wei, tokensExcludingBonus, bonus);
     }
 
     function internalRefund(address _holder) internal {
         require(block.timestamp > endDate);
         require(tokensSold < softCap);
+        require(crowdsaleAgent != address(0));
 
         uint256 value = contributorsWei[_holder];
 
         require(value > 0);
 
         contributorsWei[_holder] = 0;
+        uint256 burnedTokens = crowdsaleAgent.onRefund(_holder, 0);
 
         _holder.transfer(value);
 
-        // @TODO: burn tokens
-        Refund(_holder, value, 0);
+        Refund(_holder, value, burnedTokens);
     }
 }
 

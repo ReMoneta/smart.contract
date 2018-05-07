@@ -5,24 +5,6 @@ import "./contribution/DistributedDirectContributionForwarder.sol";
 import "./pricing/USDDateTiersPricingStrategy.sol";
 import "./allocator/MintableTokenAllocator.sol";
 
-//TestCases
-/*
-  - deploy contract & set allocator and pricing strategy, check if the params  are equal
-    - check  if updateState updates start and end dates
-    - check contribution
-        - only multivest pro is allowed
-        - zero weis  should fail
-        - less than  min purchase  should fail (100$ and 10$)
-        - outdated  should fail
-        - before sale period  should fail
-        - tokens less than for all tiers  should fail
-        - tokens amount is calculated according to discount
-        - success for each  tier (updates  total suply, tokens available, collectedEthers...)
-    - withdrawing is impossible till the softcap collected;
-    - hardCap can be changed by Owner Only
-    -check lockup period
-
-*/
 
 contract REMCrowdSale is RefundableCrowdsale {
 
@@ -65,10 +47,12 @@ contract REMCrowdSale is RefundableCrowdsale {
         super.updateState();
     }
 
+    function updateHardCap(uint256 _newHardCap) public onlyOwner {
+        hardCap = _newHardCap;
+    }
+
     function internalContribution(address _contributor, uint256 _wei) internal {
         updateState();
         super.internalContribution(_contributor, _wei);
     }
-
-
 }

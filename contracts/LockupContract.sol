@@ -27,6 +27,8 @@ contract LockupContract is Ownable {
 
     mapping(address => bool) public lockupAgents;
 
+    event Lock(address holderAddress, uint256 amount);
+
     modifier onlyLockupAgents() {
         require(lockupAgents[msg.sender]);
         _;
@@ -46,6 +48,7 @@ contract LockupContract is Ownable {
             _amount = _amount.mul(uint256(100).sub(initialUnlock)).div(100);
         }
         lockedAmount[_address].push(_amount);
+        Lock(_address, _amount);
     }
 
     function updateLockupAgent(address _agent, bool _status) public onlyOwner {

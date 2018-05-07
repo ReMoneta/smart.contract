@@ -51,5 +51,12 @@ contract ERC223CrowdsaleAgent is CrowdsaleAgent {
         _state = _state;
         // TODO: add impl
     }
+    /// @notice Takes actions on refund
+    function onRefund(address _contributor, uint256 _tokens) public onlyCrowdsale() returns (uint256 burned) {
+        _contributor = _contributor;
+        _tokens = _tokens;
+        burned = burned;
+        // TODO: add impl
+    }
 
 }

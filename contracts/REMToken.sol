@@ -4,6 +4,7 @@ pragma solidity 0.4.19;
 import './token/erc20/TimeLockedToken.sol';
 import './token/erc20/openzeppelin/OpenZeppelinERC20.sol';
 import './token/erc20/MintableToken.sol';
+import './token/erc20/BurnableToken.sol';
 import './LockupContract.sol';
 
 
@@ -13,12 +14,14 @@ import './LockupContract.sol';
     - check setUnlockTime function:
         - updates time
         - only owner can call it
+   - check  transfer
 
 */
 
 
-contract REMToken is TimeLockedToken, LockupContract, OpenZeppelinERC20, MintableToken {
+contract REMToken is TimeLockedToken, LockupContract, OpenZeppelinERC20, BurnableToken, MintableToken {
 
+    // _unlockTokensTime - 30 days after ICO
     function REMToken(uint256 _unlockTokensTime) public
     TimeLockedToken(_unlockTokensTime)
     LockupContract(uint256(1 years).div(2), 10, 1 days)

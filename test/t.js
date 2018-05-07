@@ -1,5 +1,5 @@
 var
-    REMToken = artifacts.require("./REMToken.sol"),
+    REMToken = artifacts.require("./test/REMTokenTest.sol"),
     REMCrowdSale = artifacts.require("./REMCrowdSale.sol"),
     REMStrategy = artifacts.require("./REMStrategy.sol"),
     MintableTokenAllocator = artifacts.require("./allocator/MintableTokenAllocator.sol"),
@@ -90,7 +90,7 @@ contract('Token', function (accounts) {
 
         await crowdsale.addSigner(signAddress);
 
-       let tokens = await strategy.getTokens(
+       let tokens = await strategy.getTokens.call(
             accounts[0],
             new BigNumber('9005009000').mul(precision),
             0,
@@ -118,5 +118,40 @@ contract('Token', function (accounts) {
 
         currentState = await crowdsale.getState()//InCrowdsale
         assert.equal(currentState, 3, "state doesn't match");
+    });
+    it("check  transfer", async function () {
+        const {
+            token,
+            allocator,
+            contributionForwarder,
+            strategy,
+            crowdsale,
+            agent
+        } = await deploy();
+
+        let currentState = await crowdsale.getState()//Initializing
+        assert.equal(currentState, 1, "state doesn't match");
+
+        await token.updateMintingAgent(allocator.address, true);
+        await crowdsale.setCrowdsaleAgent(agent.address);
+        await allocator.addCrowdsales(crowdsale.address);
+        await crowdsale.addSigner(signAddress);
+
+
+        await makeTransactionKYC(crowdsale, signAddress, accounts[4], new BigNumber('2').mul(precision))
+            .then(Utils.receiptShouldSucceed)
+        assert.equal(new BigNumber(await token.totalSupply.call()).valueOf(), new BigNumber('15009000').mul(precision).valueOf(), "state doesn't match");
+
+        await strategy.updateDates(0, icoSince - 3600*2, icoSince - 3600);
+        await crowdsale.updateState();
+        await token.mint(accounts[3], 10000)
+            .then(Utils.receiptShouldSucceed)
+        await token.transfer(accounts[2], 100, {from:accounts[3]})
+            .then(Utils.receiptShouldFailed)
+            .catch(Utils.catchReceiptShouldFailed)
+        await token.setUnlockTokensTimeTest(icoSince - 3600)
+        await Utils.balanceShouldEqualTo(token, accounts[3], 10000)
+        await token.transfer(accounts[2], 100, {from:accounts[3]})
+            .then(Utils.receiptShouldSucceed)
     });
 });
