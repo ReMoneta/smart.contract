@@ -287,7 +287,7 @@ contract('Token', function (accounts) {
                 token: {
                     // time: crowdsaleTill,
                     standard: 'ERC20 0.1',
-                    maxSupply: new BigNumber('200000000000').mul(precision).valueOf(),
+                    maxSupply: new BigNumber('400000000000').mul(precision).valueOf(),
                     mintingAgents: [
                         {[accounts[0]]: true},
                         {[accounts[1]]: false},
@@ -418,7 +418,7 @@ contract('Token', function (accounts) {
             token: {
                 // time: crowdsaleTill,
                 standard: 'ERC20 0.1',
-                maxSupply: new BigNumber('200000000000').mul(precision).valueOf(),
+                maxSupply: new BigNumber('400000000000').mul(precision).valueOf(),
                 mintingAgents: [
                     {[accounts[0]]: true},
                     {[accounts[1]]: false},
@@ -516,7 +516,7 @@ contract('Token', function (accounts) {
             token: {
                 // time: crowdsaleTill,
                 standard: 'ERC20 0.1',
-                maxSupply: new BigNumber('200000000000').mul(precision).valueOf(),
+                maxSupply: new BigNumber('400000000000').mul(precision).valueOf(),
                 mintingAgents: [
                     {[accounts[0]]: true},
                     {[accounts[1]]: false},

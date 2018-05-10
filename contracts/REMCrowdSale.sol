@@ -13,7 +13,7 @@ contract REMCrowdSale is RefundableCrowdsale {
     uint256 public constant PRE_ICO_TIER = 0;
     uint256 public constant ICO_TIER = 1;
 
-
+    uint256 public  activeTier;
     mapping(address => uint256) public contributorBonuses;
 
     function REMCrowdSale(

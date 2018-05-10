@@ -107,14 +107,14 @@ contract CrowdsaleImpl is Crowdsale, Ownable {
 
     /// @notice allows to do signed contributions
     function contribute(uint8 _v, bytes32 _r, bytes32 _s) public payable {
-        address recoveredAddress = verify(_v, _r, _s);
+        address recoveredAddress = verify(msg.sender, _v, _r, _s);
         require(signers[recoveredAddress]);
         internalContribution(msg.sender, msg.value);
     }
 
     /// @notice check sign
-    function verify(uint8 _v, bytes32 _r, bytes32 _s) public constant returns (address) {
-        bytes32 hash = keccak256(this, msg.sender);
+    function verify(address _sender, uint8 _v, bytes32 _r, bytes32 _s) public constant returns (address) {
+        bytes32 hash = keccak256(this, _sender);
 
         bytes memory prefix = '\x19Ethereum Signed Message:\n32';
 

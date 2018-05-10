@@ -26,7 +26,7 @@ contract REMToken is TimeLockedToken, LockupContract, OpenZeppelinERC20, Burnabl
     TimeLockedToken(_unlockTokensTime)
     LockupContract(uint256(1 years).div(2), 10, 1 days)
     OpenZeppelinERC20(0, 'Remoneta ERC 20 Token', 18, 'REM', false)
-    MintableToken(uint256(200000000000).mul(10 ** 18), 0, true) {
+    MintableToken(uint256(400000000000).mul(10 ** 18), 0, true) {
 
     }
 

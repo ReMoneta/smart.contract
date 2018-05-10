@@ -1,31 +1,50 @@
 pragma solidity 0.4.19;
 
 import '../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
-import "./REMToken.sol";
-import "./REMCrowdSale.sol";
+import './allocator/MintableTokenAllocator.sol';
+import "./crowdsale/CrowdsaleImpl.sol";
 import "./Ownable.sol";
 
-
+// testcases
+/*
+- create & check  params
+- setCrowdsale and setAllocator are changing state variables & only Owner can call it
+- multivestMint
+    - only  crowdsale signers  can run it
+    - if  sentOnce is  true referral can claim tokens only once
+    - if  sentOnce is  false referral can claim tokens many times
+    - if  sentOnce is  false referral can claim tokens many times
+    - tokens amount should be > 0
+    -  tokens amount should be <= totalSupply
+    -  should fail  if  allocator is not set up (set referral in allocator)
+    -  updates claimedBalances
+*/
 contract Referral is Ownable {
 
     using SafeMath for uint256;
 
     MintableTokenAllocator allocator;
-    REMCrowdSale public crowdsale;
+    CrowdsaleImpl public crowdsale;
 
     uint256 public constant DECIMALS = 18;
 
-    uint256 public totalSupply = 35000000 * 10 ** DECIMALS;
+    uint256 public totalSupply;
+    bool public sentOnce;
 
-    mapping (address => bool) public claimed;
-
+    mapping(address => bool) public claimed;
+    mapping(address => uint256) public claimedBalances;
+event Debug(string _s,address _a);
     function Referral(
+        uint256 _totalSupply,
         address _allocator,
-        address _crowdsale
+        address _crowdsale,
+        bool _sentOnce
     ) public {
-        require(_allocator != address(0) && crowdsale != address(0));
+        require(_allocator != address(0) && _crowdsale != address(0));
+        totalSupply = _totalSupply;
         allocator = MintableTokenAllocator(_allocator);
-        crowdsale = REMCrowdSale(_crowdsale);
+        crowdsale = CrowdsaleImpl(_crowdsale);
+        sentOnce = _sentOnce;
     }
 
     function setAllocator(address _allocator) public onlyOwner {
@@ -34,9 +53,9 @@ contract Referral is Ownable {
         }
     }
 
-    function setREMCrowdSale(address _crowdsale) public onlyOwner {
+    function setCrowdsale(address _crowdsale) public onlyOwner {
         require(_crowdsale != address(0));
-        crowdsale = REMCrowdSale(_crowdsale);
+        crowdsale = CrowdsaleImpl(_crowdsale);
     }
 
     function multivestMint(
@@ -46,18 +65,22 @@ contract Referral is Ownable {
         bytes32 _r,
         bytes32 _s
     ) public {
-        address recoveredAddress = crowdsale.verify(_v, _r, _s);
-        require(crowdsale.signers(recoveredAddress));
+        address recoveredAddress = crowdsale.verify(msg.sender, _v, _r, _s);
+        require(true == crowdsale.signers(recoveredAddress));
+        if (true == sentOnce) {
+            require(claimed[_address] == false);
+            claimed[_address] = true;
 
+        }
         _amount = _amount.mul(10 ** DECIMALS);
         require(
-            claimed[_address] == false &&
             _address == msg.sender &&
             _amount > 0 &&
             _amount <= totalSupply
         );
-        allocator.allocate(_address, _amount);
+        claimedBalances[_address] = claimedBalances[_address].add(_amount);
         totalSupply = totalSupply.sub(_amount);
-        claimed[_address] = true;
+        allocator.allocate(_address, _amount);
+
     }
 }
