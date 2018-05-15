@@ -1,16 +1,15 @@
 pragma solidity 0.4.19;
 
-import "./Referral.sol";
-import "./REMStrategy.sol";
+import './Referral.sol';
+import './REMStrategy.sol';
 
-
-//@todo needs to be more discussed
 
 contract REMReferral is Referral {
 
     REMStrategy public pricingStrategy;
 
     event BurnUnusedTokens(uint256 burnedBalance);
+
     function REMReferral(
         uint256 _totalSupply,
         address _allocator,
@@ -23,6 +22,10 @@ contract REMReferral is Referral {
     function setCrowdsale(address _crowdsale) public onlyOwner {
         super.setCrowdsale(_crowdsale);
         pricingStrategy = REMStrategy(crowdsale.pricingStrategy());
+    }
+
+    function setTotalSupply(uint256 _newValue) public onlyOwner {
+        totalSupply = _newValue;
     }
 
     function burnUnusedTokens() public onlyOwner {

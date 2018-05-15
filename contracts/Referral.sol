@@ -2,8 +2,8 @@ pragma solidity 0.4.19;
 
 import '../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
 import './allocator/MintableTokenAllocator.sol';
-import "./crowdsale/CrowdsaleImpl.sol";
-import "./Ownable.sol";
+import './crowdsale/CrowdsaleImpl.sol';
+import './Ownable.sol';
 
 // testcases
 /*
@@ -23,7 +23,7 @@ contract Referral is Ownable {
 
     using SafeMath for uint256;
 
-    MintableTokenAllocator allocator;
+    MintableTokenAllocator public allocator;
     CrowdsaleImpl public crowdsale;
 
     uint256 public constant DECIMALS = 18;
@@ -33,7 +33,7 @@ contract Referral is Ownable {
 
     mapping(address => bool) public claimed;
     mapping(address => uint256) public claimedBalances;
-event Debug(string _s,address _a);
+
     function Referral(
         uint256 _totalSupply,
         address _allocator,

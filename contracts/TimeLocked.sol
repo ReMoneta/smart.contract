@@ -6,14 +6,15 @@ pragma solidity ^0.4.18;
 /// @dev Base class
 contract TimeLocked {
     uint256 public time;
+    mapping(address => bool) public excludedAddresses;
 
-    modifier isTimeLocked(bool _timeLocked) {
+    modifier isTimeLocked(address _holder, bool _timeLocked) {
         bool locked = (block.timestamp < time);
-
-        require(locked == _timeLocked);
-
+        require(excludedAddresses[_holder] == true || locked == _timeLocked);
         _;
     }
+
+    function updateExcludedAddress(address _address, bool _status) public;
 
     function TimeLocked(uint256 _time) public {
         time = _time;

@@ -146,6 +146,14 @@ contract('Token', function (accounts) {
         await crowdsale.updateState();
         await token.mint(accounts[3], 10000)
             .then(Utils.receiptShouldSucceed)
+        await token.mint(accounts[4], 1000)
+            .then(Utils.receiptShouldSucceed)
+        await token.updateExcludedAddress(accounts[4], true)
+            .then(Utils.receiptShouldSucceed)
+        assert.equal((await token.excludedAddresses.call(accounts[4])).valueOf(), true,'excludedAddresses is not equal')
+        await token.transfer(accounts[2], 100, {from:accounts[4]})
+            .then(Utils.receiptShouldSucceed)
+        await Utils.balanceShouldEqualTo(token, accounts[2], 100)
         await token.transfer(accounts[2], 100, {from:accounts[3]})
             .then(Utils.receiptShouldFailed)
             .catch(Utils.catchReceiptShouldFailed)
@@ -153,5 +161,6 @@ contract('Token', function (accounts) {
         await Utils.balanceShouldEqualTo(token, accounts[3], 10000)
         await token.transfer(accounts[2], 100, {from:accounts[3]})
             .then(Utils.receiptShouldSucceed)
+
     });
 });

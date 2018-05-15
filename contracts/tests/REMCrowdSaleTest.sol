@@ -1,6 +1,6 @@
 pragma solidity 0.4.19;
 
-import "../REMCrowdSale.sol";
+import '../REMCrowdSale.sol';
 
 
 contract REMCrowdSaleTest is REMCrowdSale {

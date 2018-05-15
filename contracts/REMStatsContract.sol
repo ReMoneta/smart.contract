@@ -5,14 +5,14 @@ import './token/erc20/MintableToken.sol';
 import './REMStrategy.sol';
 import '../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
 
-contract StatsContract {
+contract REMStatsContract {
     using SafeMath for uint256;
 
     MintableToken public token;
     REMCrowdSale public crowdsale;
     REMStrategy public strategy;
 
-    function StatsContract(
+    function REMStatsContract (
         MintableToken _token,
         REMCrowdSale _crowdsale
     ) public {
@@ -27,10 +27,19 @@ contract StatsContract {
         uint256 sold,
         uint256 softCap,
         uint256 hardCap,
+        uint256 activeTier,
+        uint256 tokensPerUSD,
         uint256[3] ethContr, //tokensPerEth, shares,
         uint256[3] bthContr, // tokensPerBtc, shares,
         uint256[12] tiersData
     ) {
+        activeTier = strategy.getTierIndex(0);
+        tiersData = strategy.getArrayOfTiers();
+        if (activeTier.mul(6).add(3) >= 12) {
+            tokensPerUSD = 0;
+        }else{
+            tokensPerUSD = tiersData[activeTier.mul(6)];
+        }
         start = crowdsale.startDate();
         end = crowdsale.endDate();
         sold = crowdsale.tokensSold();
@@ -38,7 +47,7 @@ contract StatsContract {
         hardCap = crowdsale.hardCap();
         (ethContr[0], ethContr[1], ethContr[2]) = strategy.getTokens(0x0, hardCap.sub(sold), sold, 1 ether, 0);
         (bthContr[0], bthContr[1], bthContr[2]) = strategy.getTokens(0x0, hardCap.sub(sold), sold, _ethPerBtc, 0);
-        tiersData = strategy.getArrayOfTiers();
+
     }
 
 }

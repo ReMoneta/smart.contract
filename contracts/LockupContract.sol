@@ -26,6 +26,7 @@ contract LockupContract is Ownable {
     mapping (address => uint256[]) public lockedAmount;
 
     mapping(address => bool) public lockupAgents;
+    mapping(address => bool) public excludedAddresses;
 
     event Lock(address holderAddress, uint256 amount);
 
@@ -55,13 +56,17 @@ contract LockupContract is Ownable {
         lockupAgents[_agent] = _status;
     }
 
+    function updateExcludedAddress(address _address, bool _status) public onlyOwner {
+        excludedAddresses[_address] = _status;
+    }
+
     function isTransferAllowedInternal(
         address _address,
         uint256 _value,
         uint256 _time,
         uint256 _holderBalance
     ) internal view returns (bool) {
-        if (lockedAmount[_address].length == 0) {
+        if (excludedAddresses[_address] == true || lockedAmount[_address].length == 0) {
             return true;
         }
 

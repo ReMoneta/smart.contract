@@ -1,9 +1,9 @@
 pragma solidity 0.4.19;
 
-import "./crowdsale/RefundableCrowdsale.sol";
-import "./contribution/DistributedDirectContributionForwarder.sol";
-import "./pricing/USDDateTiersPricingStrategy.sol";
-import "./allocator/MintableTokenAllocator.sol";
+import './crowdsale/RefundableCrowdsale.sol';
+import './contribution/DistributedDirectContributionForwarder.sol';
+import './pricing/USDDateTiersPricingStrategy.sol';
+import './allocator/MintableTokenAllocator.sol';
 
 
 contract REMCrowdSale is RefundableCrowdsale {

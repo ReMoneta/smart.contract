@@ -21,6 +21,14 @@ import './LockupContract.sol';
 
 contract REMToken is TimeLockedToken, LockupContract, OpenZeppelinERC20, BurnableToken, MintableToken {
 
+    mapping(address => bool) public excludedAddresses;
+
+    modifier isTimeLocked(address _holder, bool _timeLocked) {
+        bool locked = (block.timestamp < time);
+        require(excludedAddresses[_holder] == true || locked == _timeLocked);
+        _;
+    }
+
     // _unlockTokensTime - 30 days after ICO
     function REMToken(uint256 _unlockTokensTime) public
     TimeLockedToken(_unlockTokensTime)
@@ -53,4 +61,7 @@ contract REMToken is TimeLockedToken, LockupContract, OpenZeppelinERC20, Burnabl
         return isTransferAllowedInternal(_address, _value, block.timestamp, balanceOf(_address));
     }
 
+    function updateExcludedAddress(address _address, bool _status) public onlyOwner {
+        excludedAddresses[_address] = _status;
+    }
 }
