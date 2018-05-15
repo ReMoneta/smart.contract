@@ -37,7 +37,7 @@ contract REMStatsContract {
         tiersData = strategy.getArrayOfTiers();
         if (activeTier.mul(6).add(3) >= 12) {
             tokensPerUSD = 0;
-        }else{
+        } else {
             tokensPerUSD = tiersData[activeTier.mul(6)];
         }
         start = crowdsale.startDate();

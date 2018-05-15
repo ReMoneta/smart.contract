@@ -14,9 +14,9 @@ contract TimeLocked {
         _;
     }
 
-    function updateExcludedAddress(address _address, bool _status) public;
-
     function TimeLocked(uint256 _time) public {
         time = _time;
     }
+
+    function updateExcludedAddress(address _address, bool _status) public;
 }

@@ -133,7 +133,6 @@ contract TokenAllocation is Ownable {
 
     }
 
-
     function vestingMint(PeriodicTokenVesting _vesting, Allocator _allocator, uint256 _amount) public onlyOwner {
         require(_amount > 0);
         _allocator.allocate(address(_vesting), _amount);

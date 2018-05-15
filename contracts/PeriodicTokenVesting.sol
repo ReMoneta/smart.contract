@@ -24,6 +24,7 @@ contract PeriodicTokenVesting is TokenVesting {
         periods = _periods;
         unreleasedHolder = _unreleasedHolder;
     }
+
     /**
     * @dev Calculates the amount that has already vested.
     * @param token ERC20 token which is being vested
