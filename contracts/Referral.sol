@@ -29,6 +29,7 @@ contract Referral is Ownable {
     uint256 public constant DECIMALS = 18;
 
     uint256 public totalSupply;
+    bool public unLimited;
     bool public sentOnce;
 
     mapping(address => bool) public claimed;
@@ -42,6 +43,9 @@ contract Referral is Ownable {
     ) public {
         require(_allocator != address(0) && _crowdsale != address(0));
         totalSupply = _totalSupply;
+        if (totalSupply == 0) {
+            unLimited = true;
+        }
         allocator = MintableTokenAllocator(_allocator);
         crowdsale = CrowdsaleImpl(_crowdsale);
         sentOnce = _sentOnce;
@@ -76,11 +80,12 @@ contract Referral is Ownable {
         require(
             _address == msg.sender &&
             _amount > 0 &&
-            _amount <= totalSupply
+            (true == unLimited || _amount <= totalSupply)
         );
         claimedBalances[_address] = claimedBalances[_address].add(_amount);
-        totalSupply = totalSupply.sub(_amount);
+        if (false == unLimited) {
+            totalSupply = totalSupply.sub(_amount);
+        }
         allocator.allocate(_address, _amount);
-
     }
 }

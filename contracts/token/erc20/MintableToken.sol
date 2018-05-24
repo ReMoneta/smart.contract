@@ -45,7 +45,7 @@ contract MintableToken is StandardToken, Ownable {
 
         totalSupply_ = totalSupply_.add(_tokens);
 
-        balances[_holder] = balanceOf(_holder).add(_tokens);
+        balances[_holder] = balances[_holder].add(_tokens);
 
         if (totalSupply_ == maxSupply) {
             allowedMinting = false;

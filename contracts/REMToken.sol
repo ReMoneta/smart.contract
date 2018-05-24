@@ -6,6 +6,7 @@ import './token/erc20/openzeppelin/OpenZeppelinERC20.sol';
 import './token/erc20/MintableToken.sol';
 import './token/erc20/BurnableToken.sol';
 import './LockupContract.sol';
+import './AllocationLockupContract.sol';
 
 
 /*
@@ -19,9 +20,11 @@ import './LockupContract.sol';
 */
 
 
-contract REMToken is TimeLockedToken, LockupContract, OpenZeppelinERC20, BurnableToken, MintableToken {
+contract REMToken is TimeLockedToken, LockupContract, AllocationLockupContract, OpenZeppelinERC20, BurnableToken, MintableToken {
 
     mapping(address => bool) public excludedAddresses;
+    mapping(address => uint256) public intermediateBalances;
+    mapping(address => bool) public claimed;
 
     modifier isTimeLocked(address _holder, bool _timeLocked) {
         bool locked = (block.timestamp < time);
@@ -32,6 +35,7 @@ contract REMToken is TimeLockedToken, LockupContract, OpenZeppelinERC20, Burnabl
     // _unlockTokensTime - 30 days after ICO
     function REMToken(uint256 _unlockTokensTime) public
     TimeLockedToken(_unlockTokensTime)
+    AllocationLockupContract()
     LockupContract(uint256(1 years).div(2), 10, 1 days)
     OpenZeppelinERC20(0, 'Remoneta ERC 20 Token', 18, 'REM', false)
     MintableToken(uint256(400000000000).mul(10 ** 18), 0, true) {
@@ -42,26 +46,56 @@ contract REMToken is TimeLockedToken, LockupContract, OpenZeppelinERC20, Burnabl
         time = _unlockTokensTime;
     }
 
+    function balanceOf(address _owner) public  view returns (uint256 balance) {
+        if (excludedAddresses[_owner] == true || (time <= block.timestamp && claimed[_owner] == true)) {
+            return super.balanceOf(_owner);
+        }
+        return 0;
+    }
+
     function updateMaxSupply(uint256 _newMaxSupply) public onlyOwner {
         require(_newMaxSupply > 0);
         maxSupply = _newMaxSupply;
     }
 
-    function transfer(address _to, uint256 _tokens) public returns (bool) {
-        require(true == isTransferAllowed(msg.sender, _tokens));
-        return super.transfer(_to, _tokens);
+    function setClaimState(address _holder, bool _state) public onlyMintingAgents {
+        claimed[_holder] = _state;
     }
 
-    function transferFrom(address _holder, address _to, uint256 _tokens) public returns (bool) {
-        require(true == isTransferAllowed(_holder, _tokens));
-        return super.transferFrom(_holder, _to, _tokens);
+    function transfer(address _to, uint256 _value) public returns (bool) {
+        require(balanceOf(msg.sender) >= _value);
+        require(true == isTransferAllowed(msg.sender, _value));
+        require(true == super.transfer(_to, _value));
+        intermediateBalances[msg.sender] = intermediateBalances[msg.sender].sub(_value);
+        intermediateBalances[_to] = intermediateBalances[_to].add(_value);
+        return true;
+    }
+
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool) {
+        require(balanceOf(_from)>=_value);
+        require(true == isTransferAllowed(_from, _value));
+        require (true == super.transferFrom(_from, _to, _value));
+        intermediateBalances[_from] = intermediateBalances[_from].sub(_value);
+        intermediateBalances[_to] = intermediateBalances[_to].add(_value);
+        return true;
     }
 
     function isTransferAllowed(address _address, uint256 _value) public view returns (bool) {
+        return isTransferAllowedAllocation(_address, _value, block.timestamp, balanceOf(_address));
         return isTransferAllowedInternal(_address, _value, block.timestamp, balanceOf(_address));
     }
 
     function updateExcludedAddress(address _address, bool _status) public onlyOwner {
         excludedAddresses[_address] = _status;
+    }
+
+    function burn(address _holder) public onlyBurnAgents() returns (uint256 balance) {
+        intermediateBalances[_holder] = 0;
+        return super.burn(_holder);
+    }
+
+    function mint(address _holder, uint256 _tokens) public onlyMintingAgents() {
+        super.mint(_holder, _tokens);
+        intermediateBalances[_holder] = intermediateBalances[_holder].add(_tokens);
     }
 }

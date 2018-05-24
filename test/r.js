@@ -157,9 +157,21 @@ console.log(accounts[1]);
             .then(Utils.receiptShouldSucceed);
     })
 
-    it("tokens amount should be > 0", async function () {
+    it("check unlimited", async function () {
+        referral = await Referral.new(
+            new BigNumber('0').mul(precision).valueOf(),
+            allocator.address,
+            crowdsale.address,
+            true
+        )
+        await token.updateMintingAgent(referral.address, true);
+        await token.updateMintingAgent(allocator.address, true);
+        await allocator.addCrowdsales(referral.address);
+        await crowdsale.addSigner(signAddress);
+        await makeTransaction(referral, signAddress,  crowdsale.address, accounts[1], new BigNumber('1000').valueOf())
+            .then(Utils.receiptShouldSucceed);
     })
-    it("tokens amount should be <= totalSupply", async function () {
+    it("tokens amount should be <= totalSupply if is limited ", async function () {
         await makeTransaction(referral, signAddress,  crowdsale.address, accounts[1], new BigNumber('1001').valueOf())
             .then(Utils.receiptShouldFailed)
             .catch(Utils.catchReceiptShouldFailed)

@@ -2,6 +2,7 @@ var
     REMToken = artifacts.require("./test/REMTokenTest.sol"),
     REMCrowdSale = artifacts.require("./REMCrowdSale.sol"),
     REMStrategy = artifacts.require("./REMStrategy.sol"),
+    REMAllocation = artifacts.require("./TokenAllocation.sol"),
     MintableTokenAllocator = artifacts.require("./allocator/MintableTokenAllocator.sol"),
     DistributedDirectContributionForwarder = artifacts.require("./contribution/DistributedDirectContributionForwarder.sol"),
     MintableMultipleCrowdsaleOnSuccessAgent = artifacts.require("./agent/MintableMultipleCrowdsaleOnSuccessAgent.sol"),
@@ -37,6 +38,9 @@ async function deploy() {
         );
 
     const agent = await MintableMultipleCrowdsaleOnSuccessAgent.new([crowdsale.address], token.address);
+    const allocation = await REMAllocation.new(crowdsale.address,allocator.address);
+    await allocator.addCrowdsales(allocation.address);
+    await token.updateLockupAgent(allocation.address,true);
 
 
     return {
@@ -45,7 +49,8 @@ async function deploy() {
         contributionForwarder,
         strategy,
         crowdsale,
-        agent
+        agent,
+        allocation
     };
 }
 
@@ -61,7 +66,17 @@ function makeTransactionKYC(instance, sign, address, value) {
 
     return instance.sendTransaction({value: value, from: address, data: data.toString('hex')});
 }
+async function makeTransaction(instance, sign, csale, address, amount, _allocator) {
+    'use strict';
+    var h = abi.soliditySHA3(['address', 'address'], [new BN(csale.substr(2), 16), new BN(address.substr(2), 16)]),
+        sig = web3.eth.sign(sign, h.toString('hex')).slice(2),
+        r = `0x${sig.slice(0, 64)}`,
+        s = `0x${sig.slice(64, 128)}`,
+        v = web3.toDecimal(sig.slice(128, 130)) + 27;
+    var data = abi.simpleEncode('multivestMint(address,uint256[3],address,uint8,bytes32,bytes32)', address, amount, _allocator, v, r, s);
 
+    return instance.sendTransaction({from: address, data: data.toString('hex')});
+}
 contract('Token', function (accounts) {
 
     it("deploy", async function () {
@@ -126,13 +141,15 @@ contract('Token', function (accounts) {
             contributionForwarder,
             strategy,
             crowdsale,
-            agent
+            agent,
+            allocation
         } = await deploy();
 
         let currentState = await crowdsale.getState()//Initializing
         assert.equal(currentState, 1, "state doesn't match");
 
         await token.updateMintingAgent(allocator.address, true);
+        await token.updateMintingAgent(allocation.address, true);
         await crowdsale.setCrowdsaleAgent(agent.address);
         await allocator.addCrowdsales(crowdsale.address);
         await crowdsale.addSigner(signAddress);
@@ -148,19 +165,32 @@ contract('Token', function (accounts) {
             .then(Utils.receiptShouldSucceed)
         await token.mint(accounts[4], 1000)
             .then(Utils.receiptShouldSucceed)
+        await token.transfer(accounts[2], 100, {from:accounts[4]})
+            .then(Utils.receiptShouldFailed)
+            .catch(Utils.catchReceiptShouldFailed);
         await token.updateExcludedAddress(accounts[4], true)
             .then(Utils.receiptShouldSucceed)
         assert.equal((await token.excludedAddresses.call(accounts[4])).valueOf(), true,'excludedAddresses is not equal')
         await token.transfer(accounts[2], 100, {from:accounts[4]})
             .then(Utils.receiptShouldSucceed)
-        await Utils.balanceShouldEqualTo(token, accounts[2], 100)
+        await Utils.balanceShouldEqualTo(token, accounts[2], 0)
+        assert.equal(new BigNumber(await token.intermediateBalances.call(accounts[2])).valueOf(), 100, 'intermediateBalances is not equal')
         await token.transfer(accounts[2], 100, {from:accounts[3]})
             .then(Utils.receiptShouldFailed)
             .catch(Utils.catchReceiptShouldFailed)
         await token.setUnlockTokensTimeTest(icoSince - 3600)
-        await Utils.balanceShouldEqualTo(token, accounts[3], 10000)
+        await Utils.balanceShouldEqualTo(token, accounts[3], 0)
+        assert.equal(new BigNumber(await token.intermediateBalances.call(accounts[3])).valueOf(), 10000, 'intermediateBalances is not equal')
+        await token.updateMintingAgent(allocation.address, true);
+        await token.updateMintingAgent(allocator.address, true);
+        await allocator.addCrowdsales(allocation.address);
+        await crowdsale.addSigner(signAddress);
+        await allocation.setVestingStartDate(icoSince)
+        await makeTransaction(allocation, signAddress, crowdsale.address, accounts[3], [new BigNumber('10').valueOf(),0,0], allocator.address)
+            .then(Utils.receiptShouldSucceed);
         await token.transfer(accounts[2], 100, {from:accounts[3]})
             .then(Utils.receiptShouldSucceed)
-
+        await Utils.balanceShouldEqualTo(token, accounts[2], 0)
+        assert.equal(new BigNumber(await token.intermediateBalances.call(accounts[2])).valueOf(), 200, 'intermediateBalances is not equal')
     });
 });

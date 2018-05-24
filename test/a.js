@@ -6,7 +6,7 @@ var
     DistributedDirectContributionForwarder = artifacts.require("./contribution/DistributedDirectContributionForwarder.sol"),
     MintableMultipleCrowdsaleOnSuccessAgent = artifacts.require("./agent/MintableMultipleCrowdsaleOnSuccessAgent.sol"),
     REMAllocation = artifacts.require("./TokenAllocation.sol"),
-    PeriodicTokenVesting = artifacts.require("./PeriodicTokenVesting.sol"),
+    // AllocationLockupContract = artifacts.require("./AllocationLockupContract.sol"),
 
     Utils = require("./utils"),
     BigNumber = require('BigNumber.js'),
@@ -23,10 +23,11 @@ var abi = require('ethereumjs-abi'),
     BN = require('bn.js');
 
 async function deploy() {
+    // const allocationLock = await AllocationLockupContract.new();
     const token = await REMToken.new(icoTill);
     const allocator = await MintableTokenAllocator.new(token.address);
     const contributionForwarder = await DistributedDirectContributionForwarder.new(100, [etherHolder], [100]);
-    const strategy = await REMStrategy.new([], [icoSince, icoTill],[icoTill, icoTill+3600], 75045000);
+    const strategy = await REMStrategy.new([], [icoSince, icoSince+1],[icoSince+10, icoSince+50], 75045000);
 
     const crowdsale = await REMCrowdSale.new(
         allocator.address,
@@ -39,8 +40,12 @@ async function deploy() {
     );
 
     const agent = await MintableMultipleCrowdsaleOnSuccessAgent.new([crowdsale.address], token.address);
-    const allocation = await REMAllocation.new(crowdsale.address);
-
+    await crowdsale.setCrowdsaleAgent(agent.address);
+    await allocator.addCrowdsales(crowdsale.address);
+    await crowdsale.addSigner(signAddress);
+    await token.updateMintingAgent(allocator.address, true);
+    const allocation = await REMAllocation.new(crowdsale.address,allocator.address);
+    await token.updateMintingAgent(allocation.address, true);
 
     return {
         token,
@@ -49,7 +54,7 @@ async function deploy() {
         strategy,
         crowdsale,
         agent,
-        allocation
+        allocation,
     };
 }
 
@@ -65,7 +70,17 @@ function makeTransactionKYC(instance, sign, address, value) {
 
     return instance.sendTransaction({value: value, from: address, data: data.toString('hex')});
 }
+async function makeTransaction(instance, sign, csale, address, amount, _allocator) {
+    'use strict';
+    var h = abi.soliditySHA3(['address', 'address'], [new BN(csale.substr(2), 16), new BN(address.substr(2), 16)]),
+        sig = web3.eth.sign(sign, h.toString('hex')).slice(2),
+        r = `0x${sig.slice(0, 64)}`,
+        s = `0x${sig.slice(64, 128)}`,
+        v = web3.toDecimal(sig.slice(128, 130)) + 27;
+    var data = abi.simpleEncode('multivestMint(address,uint256[3],address,uint8,bytes32,bytes32)', address, amount, _allocator, v, r, s);
 
+    return instance.sendTransaction({from: address, data: data.toString('hex')});
+}
 contract('Allocation', function (accounts) {
 
     it("deploy", async function () {
@@ -84,15 +99,13 @@ contract('Allocation', function (accounts) {
         await crowdsale.addSigner(signAddress);
         await token.updateMintingAgent(allocator.address, true);
         await allocator.addCrowdsales(allocation.address);
-        await allocation.setVestingStartDate(icoTill)
-        await allocation.setAddresses(accounts[6],accounts[7],accounts[8],accounts[9],accounts[5],accounts[4]);
-        await allocation.initVesting({from:accounts[2]})
-            .then(Utils.receiptShouldFailed)
-            .catch(Utils.catchReceiptShouldFailed);
-        await allocation.initVesting({from:accounts[0]})
-        await allocation.allocate(allocator.address)
+        await token.updateLockupAgent(allocation.address,true);
+        // await allocation.setVestingStartDate(icoTill)
+        await allocation.setAddresses(accounts[6],accounts[7],accounts[8],accounts[9],accounts[5]);
+
+        await allocation.allocate(allocator.address, new BigNumber(20).mul(precision))
             .then(Utils.receiptShouldSucceed)
-        await allocation.allocate(allocator.address)
+        await allocation.allocate(allocator.address, new BigNumber(20).mul(precision))
             .then(Utils.receiptShouldFailed)
             .catch(Utils.catchReceiptShouldFailed);
 
@@ -108,77 +121,71 @@ contract('Allocation', function (accounts) {
             agent,
             allocation,
         } = await deploy();
-        // await token.updateMintingAgent(allocator.address, true);
-        // await token.setUnlockTime(icoSince)
-        //  .then(Utils.receiptShouldSucceed)
-        // assert.equal(await token.time.call().valueOf(), icoSince, 'locked time is not equal')
-        // await allocator.addCrowdsales(allocation.address);
-        await crowdsale.setCrowdsaleAgent(agent.address);
-        await allocator.addCrowdsales(crowdsale.address);
-        await crowdsale.addSigner(signAddress);
+
+
+        await allocator.addCrowdsales(allocation.address);
+        await token.updateLockupAgent(allocation.address,true);
+        // await allocation.setVestingStartDate(icoTill)
+        await allocation.setAddresses(accounts[6],accounts[7],accounts[8],accounts[9],accounts[5]);
+
+        await allocation.allocate(allocator.address,new BigNumber(20).mul(precision))
+            .then(Utils.receiptShouldSucceed)
+
+        await  allocation.vestingMint(accounts[0],allocator.address, 1000, icoTill, 31556926,0, 3,{from: accounts[1]})
+            .then(Utils.receiptShouldFailed)
+            .catch(Utils.catchReceiptShouldFailed);
+        await  allocation.vestingMint(accounts[0],allocator.address, 1000, icoTill, 31556926,0, 3,)
+            .then(Utils.receiptShouldSucceed)
+        let starting = parseInt(new Date().getTime() / 1000) - 1
+        await  allocation.vestingMint(accounts[2],allocator.address, 100, starting, 60, 0, 3)
+            .then(Utils.receiptShouldSucceed)
+        let result = await token.isTransferAllowedAllocation.call(
+            accounts[2],
+            28,
+            starting,
+            100
+        )
+        await assert.equal((result).valueOf(), false, "isTransferAllowed is not equal")
+         starting = parseInt(new Date().getTime() / 1000) - 1
+        await  allocation.vestingMint(accounts[2],allocator.address, 100, starting, 60, 0, 30)
+            .then(Utils.receiptShouldSucceed)
+        console.log(await token.lockedAmount.call(accounts[2],4));
+        console.log(await token.lockedAmount.call(accounts[2],5));
+        console.log(await token.lockedAmount.call(accounts[2],6));
+        console.log(await token.lockedAmount.call(accounts[2],7));
+
+        console.log('bal',new BigNumber(await token.AllowedBalance.call(
+            accounts[2],
+            starting+33,
+            200
+        )).valueOf())
+        result = await token.isTransferAllowedAllocation.call(
+            accounts[2],
+            28,
+            starting+33,
+            200
+        )
+        await assert.equal((result).valueOf(), true, "isTransferAllowed is not equal")
+    });
+    it("t", async function () {
+        const {
+            token,
+            allocator,
+            contributionForwarder,
+            strategy,
+            crowdsale,
+            agent,
+            allocation,
+        } = await deploy();
+        await token.updateMintingAgent(allocation.address, true);
         await token.updateMintingAgent(allocator.address, true);
         await allocator.addCrowdsales(allocation.address);
-        await allocation.setVestingStartDate(icoTill)
-        await allocation.setAddresses(accounts[6],accounts[7],accounts[8],accounts[9],accounts[5],accounts[4]);
-        await  allocation.createVesting(accounts[0], icoTill, 0, 31556926, 3, true, accounts[0],{from: accounts[1]})
-            .then(Utils.receiptShouldFailed)
-            .catch(Utils.catchReceiptShouldFailed);
-        await  allocation.createVesting(accounts[0], icoTill, 0, 31556926, 3, true,accounts[0])
-            .then(Utils.receiptShouldSucceed)
-        console.log(await allocation.vestings.call(0));
-        let vesting = await PeriodicTokenVesting.at(await allocation.vestings.call(0)) //Address of the contract, obtained from Etherscan
-        assert.equal(await vesting.periods.call(), 3, 'periods is not equal');
-        assert.equal(await vesting.beneficiary.call(), accounts[0], '_beneficiary is not equal');
-        assert.equal(await vesting.start.call(), icoTill, 'start is not equal');
-        assert.equal(await vesting.duration.call(), 31556926, 'duration is not equal');
-        assert.equal(await vesting.revocable.call(), true, 'revocable is not equal');
-        await allocation.vestingMint(vesting.address, allocator.address, 1000)
-        assert.equal(new BigNumber(await vesting.vestedAmount(token.address)), 0, 'vestedAmount is not equal')
+        await crowdsale.addSigner(signAddress);
+        await allocation.setVestingStartDate(icoSince)
+        await makeTransaction(allocation, signAddress, crowdsale.address, accounts[1], [new BigNumber('10').valueOf(),0,0], allocator.address)
+            .then(Utils.receiptShouldSucceed);
+        await assert.equal(new BigNumber(await allocation.totalSupply.call()).valueOf(),
+            new BigNumber('0').mul(precision).valueOf(), 'claimedBalances is not equal');
 
-        await  allocation.createVesting(accounts[2], parseInt(new Date().getTime() / 1000) - 1, 0, 60, 2, true,accounts[0])
-            .then(Utils.receiptShouldSucceed)
-        vesting = await PeriodicTokenVesting.at(await allocation.vestings.call(1)) //Address of the contract, obtained from Etherscan
-        await allocation.vestingMint(vesting.address, allocator.address, 100)
-        assert.equal(new BigNumber(await vesting.vestedAmount(token.address)).valueOf(), 0, 'vestedAmount is not equal')
-
-        await  allocation.createVesting(accounts[3], parseInt(new Date().getTime() / 1000) - 31, 0, 30, 2, true,accounts[0])
-            .then(Utils.receiptShouldSucceed)
-        await allocation.vestingMint(vesting.address, allocator.address, 100)
-        vesting = await PeriodicTokenVesting.at(await allocation.vestings.call(2)) //Address of the contract, obtained from Etherscan
-        await allocation.vestingMint(vesting.address, allocator.address, 100)
-        assert.equal(new BigNumber(await vesting.vestedAmount(token.address)).valueOf(), 50, 'vestedAmount is not equal')
-
-        await vesting.release(token.address)
-            .then(Utils.receiptShouldFailed)
-            .catch(Utils.catchReceiptShouldFailed);
-        await token.updateExcludedAddress(vesting.address, true)
-        assert.equal((await token.excludedAddresses.call(vesting.address)).valueOf(), true,'excludedAddresses is not equal')
-        await vesting.release(token.address)
-        Utils.balanceShouldEqualTo(token, accounts[3], 50)
-
-        await  allocation.createVesting(accounts[4], parseInt(new Date().getTime() / 1000) - 31, 0, 30, 3, true,accounts[0])
-            .then(Utils.receiptShouldSucceed)
-        vesting = await PeriodicTokenVesting.at(await allocation.vestings.call(3)) //Address of the contract, obtained from Etherscan
-        await allocation.vestingMint(vesting.address,allocator.address, 100)
-        assert.equal(new BigNumber(await vesting.vestedAmount(token.address)).valueOf(), 33, 'vestedAmount is not equal')
-        await token.updateExcludedAddress(vesting.address, true)
-        await vesting.release(token.address);
-        await vesting.release(token.address)
-            .then(Utils.receiptShouldFailed)
-            .catch(Utils.catchReceiptShouldFailed);
-        Utils.balanceShouldEqualTo(token, accounts[4], 33)
-
-        await  allocation.createVesting(accounts[5], parseInt(new Date().getTime() / 1000) - 20, 0, 30, 2, true,accounts[0])
-            .then(Utils.receiptShouldSucceed)
-        vesting = await PeriodicTokenVesting.at(await allocation.vestings.call(4)) //Address of the contract, obtained from Etherscan
-        await allocation.vestingMint(vesting.address, allocator.address, 100)
-        assert.equal(new BigNumber(await vesting.vestedAmount(token.address)).valueOf(), 0, 'vestedAmount is not equal')
-        assert.equal(new BigNumber(await token.balanceOf.call(vesting.address)).valueOf(), 100, 'vesting balance is not equal')
-        await token.updateExcludedAddress(vesting.address, true)
-        await allocation.revokeVesting(vesting.address,token.address)
-            .then(Utils.receiptShouldSucceed)
-        assert.equal(new BigNumber(await token.balanceOf.call(vesting.address)).valueOf(), 0, 'vesting balance is not equal')
-
-
-    });
+    })
 })

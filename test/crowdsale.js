@@ -299,6 +299,11 @@ contract('Token', function (accounts) {
                     balanceOf: [
                         {[accounts[0]]: new BigNumber('0').mul(precision).valueOf()},
                         {[accounts[1]]: new BigNumber('0').mul(precision).valueOf()},
+                        {[accounts[3]]: new BigNumber('0').mul(precision).valueOf()},
+                    ],
+                    intermediateBalances: [
+                        {[accounts[0]]: new BigNumber('0').mul(precision).valueOf()},
+                        {[accounts[1]]: new BigNumber('0').mul(precision).valueOf()},
                         {[accounts[3]]: new BigNumber('11256750').mul(precision).valueOf()},
                     ],
                     totalSupply: new BigNumber('11256750').mul(precision).valueOf(),
@@ -430,6 +435,11 @@ contract('Token', function (accounts) {
                 balanceOf: [
                     {[accounts[0]]: new BigNumber('0').mul(precision).valueOf()},
                     {[accounts[1]]: new BigNumber('0').mul(precision).valueOf()},
+                    {[accounts[3]]: new BigNumber('0').mul(precision).valueOf()},
+                ],
+                intermediateBalances: [
+                    {[accounts[0]]: new BigNumber('0').mul(precision).valueOf()},
+                    {[accounts[1]]: new BigNumber('0').mul(precision).valueOf()},
                     {[accounts[3]]: new BigNumber('11256750').mul(precision).valueOf()},
                 ],
                 totalSupply: new BigNumber('11256750').mul(precision).valueOf(),
@@ -526,6 +536,11 @@ contract('Token', function (accounts) {
                 name: 'Remoneta ERC 20 Token',
                 symbol: 'REM',
                 balanceOf: [
+                    {[accounts[0]]: new BigNumber('0').mul(precision).valueOf()},
+                    {[accounts[1]]: new BigNumber('0').mul(precision).valueOf()},
+                    {[accounts[3]]: new BigNumber('0').mul(precision).valueOf()},
+                ],
+                intermediateBalances: [
                     {[accounts[0]]: new BigNumber('0').mul(precision).valueOf()},
                     {[accounts[1]]: new BigNumber('0').mul(precision).valueOf()},
                     {[accounts[3]]: new BigNumber('11256750').mul(precision).valueOf()},
