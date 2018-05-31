@@ -45,8 +45,7 @@ contract TokenAllocation is Ownable, Referral {
     constructor(
         REMCrowdSale _crowdsale,
         address _allocator
-    ) public
-    Referral(0, _allocator, _crowdsale, false) {
+    ) public Referral(0, _allocator, _crowdsale, false) {
         require(address(0) != address(_crowdsale));
         crowdsale = REMCrowdSale(_crowdsale);
         pricingStrategy = REMStrategy(address(crowdsale.pricingStrategy()));

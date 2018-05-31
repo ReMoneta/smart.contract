@@ -24,8 +24,7 @@ contract REMCrowdSale is RefundableCrowdsale {
         uint256 _endTime,
         uint256 _softCap, // (5000000/ 0.01)*100*10^18
         uint256 _hardCap // (5000000/ 0.01)*100*10^18
-    ) public
-    RefundableCrowdsale(
+    ) public RefundableCrowdsale(
         _allocator,
         _contributionForwarder,
         _pricingStrategy,
