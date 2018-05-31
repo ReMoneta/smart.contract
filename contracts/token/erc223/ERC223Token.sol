@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import './Receiver.sol';
 import './ERC223.sol';
@@ -15,7 +15,7 @@ contract ERC223Token is ERC223 {
     uint8 public decimals;
     uint256 public _totalSupply;
 
-    function ERC223Token (string _name, string _symbol, uint8 _decimals, uint256 total) public {
+    constructor (string _name, string _symbol, uint8 _decimals, uint256 total) public {
         name = _name;
         symbol = _symbol;
         decimals = _decimals;
@@ -56,7 +56,7 @@ contract ERC223Token is ERC223 {
             balances[msg.sender] = balanceOf(msg.sender) - _value;
             balances[_to] = balanceOf(_to) + _value;
             assert(_to.call.value(0)(bytes4(keccak256(_customFallback)), msg.sender, _value, _data));
-            Transfer(msg.sender, _to, _value, _data);
+            emit Transfer(msg.sender, _to, _value, _data);
             return true;
         } else {
             return transferToAddress(_to, _value, _data);
@@ -103,7 +103,7 @@ contract ERC223Token is ERC223 {
         if (balanceOf(msg.sender) < _value) revert();
         balances[msg.sender] = balanceOf(msg.sender) - _value;
         balances[_to] = balanceOf(_to) + _value;
-        Transfer(msg.sender, _to, _value, _data);
+        emit Transfer(msg.sender, _to, _value, _data);
         return true;
     }
 
@@ -114,7 +114,7 @@ contract ERC223Token is ERC223 {
         balances[_to] = balanceOf(_to) + _value;
         Receiver receiver = Receiver(_to);
         receiver.tokenFallback(msg.sender, _value, _data);
-        Transfer(msg.sender, _to, _value, _data);
+        emit Transfer(msg.sender, _to, _value, _data);
         return true;
     }
 

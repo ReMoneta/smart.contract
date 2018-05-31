@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity ^0.4.23;
 
 import '../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
 import './allocator/MintableTokenAllocator.sol';
@@ -35,7 +35,7 @@ contract Referral is Ownable {
     mapping(address => bool) public claimed;
     mapping(address => uint256) public claimedBalances;
 
-    function Referral(
+    constructor(
         uint256 _totalSupply,
         address _allocator,
         address _crowdsale,

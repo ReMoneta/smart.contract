@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity ^0.4.23;
 
 import './../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
 import './Ownable.sol';
@@ -35,7 +35,7 @@ contract LockupContract is Ownable {
         _;
     }
 
-    function LockupContract(uint256 _lockPeriod, uint256 _initialUnlock, uint256 _releasePeriod) public {
+    constructor(uint256 _lockPeriod, uint256 _initialUnlock, uint256 _releasePeriod) public {
         require(_initialUnlock <= 100);
         require(_releasePeriod <= _lockPeriod);
         lockPeriod = _lockPeriod;
@@ -49,7 +49,7 @@ contract LockupContract is Ownable {
             _amount = _amount.mul(uint256(100).sub(initialUnlock)).div(100);
         }
         lockedAmount[_address].push(_amount);
-        Lock(_address, _amount);
+        emit Lock(_address, _amount);
     }
 
     function updateLockupAgent(address _agent, bool _status) public onlyOwner {

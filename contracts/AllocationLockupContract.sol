@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity ^0.4.23;
 
 import './LockupContract.sol';
 
@@ -16,7 +16,7 @@ import './LockupContract.sol';
 */
 contract AllocationLockupContract is LockupContract {
 
-    function AllocationLockupContract() public LockupContract(0, 0, 0) {
+    constructor() public LockupContract(0, 0, 0) {
 
     }
 
@@ -35,7 +35,7 @@ contract AllocationLockupContract is LockupContract {
         lockedAmount[_address].push(_amount);
         lockedAmount[_address].push(_lockPeriod);
         lockedAmount[_address].push(_releasePeriod);
-        Lock(_address, _amount);
+        emit Lock(_address, _amount);
     }
 
     function isTransferAllowedAllocation(

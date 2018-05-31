@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './Agent.sol';
@@ -20,7 +20,7 @@ contract CrowdsaleAgent is Agent {
         _;
     }
 
-    function CrowdsaleAgent(Crowdsale _crowdsale) public {
+    constructor(Crowdsale _crowdsale) public {
         crowdsale = _crowdsale;
 
         if (address(0) != address(_crowdsale)) {

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import './ContributionForwarder.sol';
 
@@ -9,17 +9,17 @@ import './ContributionForwarder.sol';
 contract ClaimableContributionForwarder is ContributionForwarder {
     address public receiver;
 
-    function ClaimableContributionForwarder(address _receiver) public {
+    constructor(address _receiver) public {
         receiver = _receiver;
     }
 
     /// @notice transfer wei to receiver
     function transfer() public {
-        weiForwarded = weiForwarded.add(this.balance);
+        weiForwarded = weiForwarded.add(address(this).balance);
 
-        receiver.transfer(this.balance);
+        receiver.transfer(address(this).balance);
 
-        ContributionForwarded(receiver, this.balance);
+        emit ContributionForwarded(receiver, address(this).balance);
     }
 
     function internalForward() internal {

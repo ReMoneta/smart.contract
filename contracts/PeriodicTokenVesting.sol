@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity ^0.4.23;
 
 
 import 'zeppelin-solidity/contracts/token/ERC20/TokenVesting.sol';
@@ -9,7 +9,7 @@ contract PeriodicTokenVesting is TokenVesting {
     address public unreleasedHolder;
     uint256 public periods;
 
-    function PeriodicTokenVesting(
+    constructor(
         address _beneficiary,
         uint256 _start,
         uint256 _cliff,
@@ -69,6 +69,6 @@ contract PeriodicTokenVesting is TokenVesting {
 
         token.safeTransfer(unreleasedHolder, refund);
 
-        Revoked();
+        emit Revoked();
     }
 }

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import './ERC721.sol';
 
@@ -25,7 +25,7 @@ contract ERC721Token is ERC721 {
     event Transfer(address indexed _from, address indexed _to, uint256 _tokenId);
     event Approval(address indexed _owner, address indexed _approved, uint256 _tokenId);
 
-    function ERC721Token (string _name, string _symbol, uint8 _decimals, uint256 total) public {
+    constructor (string _name, string _symbol, uint8 _decimals, uint256 total) public {
         name = _name;
         symbol = _symbol;
         decimals = _decimals;
@@ -68,7 +68,7 @@ contract ERC721Token is ERC721 {
         require(msg.sender == ownerOf(_tokenId));
         require(msg.sender != _to);
         allowed[msg.sender][_to] = _tokenId;
-        Approval(msg.sender, _to, _tokenId);
+        emit Approval(msg.sender, _to, _tokenId);
     }
 
     /// @notice first call approve on a new ownership
@@ -81,7 +81,7 @@ contract ERC721Token is ERC721 {
         balances[oldOwner] -= 1;
         tokenOwners[_tokenId] = newOwner;
         balances[newOwner] += 1;
-        Transfer(oldOwner, newOwner, _tokenId);
+        emit Transfer(oldOwner, newOwner, _tokenId);
     }
 
     /// @notice transfer token from prev to new owner
@@ -96,7 +96,7 @@ contract ERC721Token is ERC721 {
         balances[currentOwner] -= 1;
         tokenOwners[_tokenId] = newOwner;
         balances[newOwner] += 1;
-        Transfer(currentOwner, newOwner, _tokenId);
+        emit Transfer(currentOwner, newOwner, _tokenId);
     }
 
     /// @notice Each non-fungible token owner can own more than one token at one time.

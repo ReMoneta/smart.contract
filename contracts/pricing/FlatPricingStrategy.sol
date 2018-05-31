@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -17,7 +17,7 @@ contract FlatPricingStrategy is PricingStrategy {
     uint256 public tokenInWei;
     uint256 public decimals;
 
-    function FlatPricingStrategy(uint256 _tokenInWei, uint256 _decimals) public {
+    constructor(uint256 _tokenInWei, uint256 _decimals) public {
         require(_tokenInWei > 0);
         tokenInWei = _tokenInWei;
         decimals = _decimals;

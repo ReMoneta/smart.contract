@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import './ERC827.sol';
 
@@ -19,7 +19,7 @@ contract ERC827Token is ERC827 {
     event Transfer(address indexed from, address indexed to, uint value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
-    function ERC827Token (string _name, string _symbol, uint8 _decimals, uint256 total) public {
+    constructor (string _name, string _symbol, uint8 _decimals, uint256 total) public {
         name = _name;
         symbol = _symbol;
         decimals = _decimals;
@@ -66,7 +66,7 @@ contract ERC827Token is ERC827 {
         require((_value == 0) || (allowed[msg.sender][_spender] == 0));
 
         allowed[msg.sender][_spender] = _value;
-        Approval(msg.sender, _spender, _value);
+        emit Approval(msg.sender, _spender, _value);
         return true;
     }
 
@@ -132,7 +132,7 @@ contract ERC827Token is ERC827 {
         balances[_to] = previousBalanceTo + _amount;
 
         // An event to make the transfer easy to find on the blockchain
-        Transfer(_from, _to, _amount);
+        emit Transfer(_from, _to, _amount);
 
         return true;
     }

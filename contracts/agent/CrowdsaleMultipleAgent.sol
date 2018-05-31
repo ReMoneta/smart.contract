@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './Agent.sol';
@@ -21,7 +21,7 @@ contract CrowdsaleMultipleAgent is Agent {
         _;
     }
 
-    function CrowdsaleMultipleAgent(Crowdsale[] _crowdsales) public {
+    constructor(Crowdsale[] _crowdsales) public {
 
         for (uint256 i = 0; i < _crowdsales.length; i++) {
             require(_crowdsales[i] != address(0));

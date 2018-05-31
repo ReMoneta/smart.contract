@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 /// @title BlockLocked
@@ -16,7 +16,7 @@ contract BlockLocked {
         _;
     }
 
-    function BlockLocked(uint256 _blockNumber) public {
+    constructor(uint256 _blockNumber) public {
         blockNumber = _blockNumber;
     }
 }

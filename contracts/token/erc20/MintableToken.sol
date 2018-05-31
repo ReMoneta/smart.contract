@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './../../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -32,7 +32,7 @@ contract MintableToken is StandardToken, Ownable {
         _;
     }
 
-    function MintableToken(uint256 _maxSupply, uint256 _mintedSupply, bool _allowedMinting) public {
+    constructor(uint256 _maxSupply, uint256 _mintedSupply, bool _allowedMinting) public {
         maxSupply = _maxSupply;
         totalSupply_ = totalSupply_.add(_mintedSupply);
         allowedMinting = _allowedMinting;
@@ -45,12 +45,12 @@ contract MintableToken is StandardToken, Ownable {
 
         totalSupply_ = totalSupply_.add(_tokens);
 
-        balances[_holder] = balances[_holder].add(_tokens);
+        balances[_holder] = balanceOf(_holder).add(_tokens);
 
         if (totalSupply_ == maxSupply) {
             allowedMinting = false;
         }
-        Mint(_holder, _tokens);
+        emit Mint(_holder, _tokens);
     }
 
     /// @notice update allowedMinting flat

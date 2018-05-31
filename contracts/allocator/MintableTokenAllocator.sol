@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -17,7 +17,7 @@ contract MintableTokenAllocator is TokenAllocator {
 
     MintableToken public token;
 
-    function MintableTokenAllocator(MintableToken _token) public {
+    constructor(MintableToken _token) public {
         require(address(0) != address(_token));
         token = _token;
     }

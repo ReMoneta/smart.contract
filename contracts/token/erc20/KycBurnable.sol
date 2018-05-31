@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import '../../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
 import './IErc20.sol';
@@ -17,7 +17,7 @@ contract KycBurnable is IErc20 {
         _;
     }
 
-    function KycBurnable() public {
+    constructor() public {
 
     }
 

@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity ^0.4.23;
 
 import './allocator/MintableTokenAllocator.sol';
 import './REMCrowdSale.sol';
@@ -42,7 +42,7 @@ contract TokenAllocation is Ownable, Referral {
     event BonusSent(address receiver, uint256 amount);
     event ReferralSent(address receiver, uint256 amount);
 
-    function TokenAllocation(
+    constructor(
         REMCrowdSale _crowdsale,
         address _allocator
     ) public
@@ -106,7 +106,7 @@ contract TokenAllocation is Ownable, Referral {
             team,
             _allocator,
             soldTokens.mul(2).div(100),
-            vestingStartDate.add(uint256(1 years).div(2)),
+            vestingStartDate.add(uint256(365 days).div(2)),
             720 days,
             0,
             30 days
@@ -146,9 +146,9 @@ contract TokenAllocation is Ownable, Referral {
         if (_amount[0] != 0 || _amount[1] != 0 || _amount[2] != 0) {
             uint256 amount = _amount[0].add(_amount[1]).add(_amount[2]);
             super.multivestMint(_address, amount, _v, _r, _s);
-            BountySent(_address, _amount[0]);
-            BonusSent(_address, _amount[1]);
-            ReferralSent(_address, _amount[2]);
+            emit BountySent(_address, _amount[0]);
+            emit BonusSent(_address, _amount[1]);
+            emit ReferralSent(_address, _amount[2]);
         }
         REMToken token = REMToken(address(_allocator.token()));
         token.setClaimState(_address, true);

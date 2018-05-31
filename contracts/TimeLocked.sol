@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 /// @title TimeLocked
 /// @author Applicature
@@ -14,7 +14,7 @@ contract TimeLocked {
         _;
     }
 
-    function TimeLocked(uint256 _time) public {
+    constructor(uint256 _time) public {
         time = _time;
     }
 

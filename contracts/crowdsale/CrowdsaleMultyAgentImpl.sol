@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -35,7 +35,7 @@ contract CrowdsaleMultyAgentImpl is Crowdsale, Ownable {
 
     event Contribution(address _contributor, uint256 _wei, uint256 _tokensExcludingBonus, uint256 _bonus);
 
-    function CrowdsaleMultyAgentImpl(
+    constructor(
         TokenAllocator _allocator,
         ContributionForwarder _contributionForwarder,
         PricingStrategy _pricingStrategy,
@@ -114,11 +114,11 @@ contract CrowdsaleMultyAgentImpl is Crowdsale, Ownable {
 
     /// @notice check sign
     function verify(address _sender, uint8 _v, bytes32 _r, bytes32 _s) public constant returns (address) {
-        bytes32 hash = keccak256(this, _sender);
+        bytes32 hash = keccak256(abi.encodePacked(this, _sender));
 
         bytes memory prefix = '\x19Ethereum Signed Message:\n32';
 
-        return ecrecover(keccak256(prefix, hash), _v, _r, _s);
+        return ecrecover(keccak256(abi.encodePacked(prefix, hash)), _v, _r, _s);
     }
 
     /// @return Crowdsale state
@@ -176,7 +176,7 @@ contract CrowdsaleMultyAgentImpl is Crowdsale, Ownable {
             contributionForwarder.forward.value(msg.value)();
         }
 
-        Contribution(_contributor, _wei, tokensExcludingBonus, bonus);
+        emit Contribution(_contributor, _wei, tokensExcludingBonus, bonus);
     }
 
 }

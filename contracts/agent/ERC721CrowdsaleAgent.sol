@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import './CrowdsaleAgent.sol';
 import '../crowdsale/Crowdsale.sol';
@@ -15,7 +15,7 @@ contract ERC721CrowdsaleAgent is CrowdsaleAgent {
     ERC721Token public token;
     bool public _isInitialized;
 
-    function ERC721CrowdsaleAgent(Crowdsale _crowdsale, ERC721Token _token)
+    constructor(Crowdsale _crowdsale, ERC721Token _token)
     public CrowdsaleAgent(_crowdsale)
     {
         crowdsale = _crowdsale;

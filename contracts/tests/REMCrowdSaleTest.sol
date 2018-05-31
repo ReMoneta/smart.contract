@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity ^0.4.23;
 
 import '../REMCrowdSale.sol';
 
@@ -6,7 +6,7 @@ import '../REMCrowdSale.sol';
 contract REMCrowdSaleTest is REMCrowdSale {
 
 
-    function REMCrowdSaleTest(
+    constructor(
         MintableTokenAllocator _allocator,
         DistributedDirectContributionForwarder _contributionForwarder,
         USDDateTiersPricingStrategy _pricingStrategy,

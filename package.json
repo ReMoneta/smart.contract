@@ -21,11 +21,11 @@
   "scripts": {
     "lint": "npm run solhint",
     "ganache": "ganache-cli > /dev/null 2>&1 &",
-    "test": "truffle test",
-    "develop": "truffle develop",
-    "compile": "truffle compile",
+    "test": "./node_modules/.bin/truffle.cmd test",
+    "develop": "./node_modules/.bin/truffle.cmd develop",
+    "compile": " ./node_modules/.bin/truffle.cmd compile",
     "coverage": "./node_modules/.bin/solidity-coverage",
-    "migrate": "truffle migrate --network development",
+    "migrate": " ./node_modules/.bin/truffle.cmd migrate --network development",
     "solhint": "node ./node_modules/solhint/solhint.js contracts/*.sol",
     "solium": "solium -d contracts/",
     "precommit": "npm run solhint && npm run coverage && npm run solium",
@@ -36,8 +36,7 @@
   },
   "dependencies": {
     "minimetoken": "^0.2.0",
-    "truffle": "4.0.6",
-    "zeppelin-solidity": "^1.7.0"
+    "truffle": "^4.1.8"
   },
   "devDependencies": {
     "bignumber.js": "^4.1.0",
@@ -46,13 +45,15 @@
     "eth-gas-reporter": "^0.1.1",
     "ethereumjs-abi": "^0.6.5",
     "ethereumjs-testrpc": "^4.1.3",
-    "ganache-cli": "^6.0.3",
+    "ganache-cli": "6.1.0",
     "husky": "^0.14.3",
     "mocha": "^5.0.0",
     "mocha-junit-reporter": "^1.17.0",
     "mocha-multi-reporters": "^1.1.7",
     "solhint": "^1.1.10",
-    "solidity-coverage": "^0.2.7",
-    "solium": "^1.1.5"
+    "solidity-coverage": "^0.5.0",
+    "solium": "^1.1.7",
+    "truffle-hdwallet-provider": "0.0.3",
+    "zeppelin-solidity": "^1.9.0"
   }
 }

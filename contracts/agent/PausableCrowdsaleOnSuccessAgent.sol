@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './CrowdsaleAgent.sol';
@@ -18,7 +18,7 @@ contract PausableCrowdsaleOnSuccessAgent is CrowdsaleAgent {
     PausableToken public token;
     bool public _isInitialized;
 
-    function PausableCrowdsaleOnSuccessAgent(Crowdsale _crowdsale, PausableToken _token)
+    constructor(Crowdsale _crowdsale, PausableToken _token)
     public CrowdsaleAgent(_crowdsale)
     {
         crowdsale = _crowdsale;

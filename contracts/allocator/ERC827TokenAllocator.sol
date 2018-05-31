@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
 import './TokenAllocator.sol';
@@ -14,7 +14,7 @@ contract ERC827TokenAllocator is TokenAllocator {
 
     ERC827Token public token;
 
-    function ERC827TokenAllocator(ERC827Token _token) public {
+    constructor(ERC827Token _token) public {
         require(address(0) != address(_token));
         token = _token;
     }
@@ -44,7 +44,7 @@ contract ERC827TokenAllocator is TokenAllocator {
 
         // Execute a function on _to with the _data parameter,
         // if the function ends successfully execute the transfer of _value amount of tokens to address _to,
-        // and fire the Transfer event.
+        // and fire the emit Transfer event.
         // the third param is data which can be used if necessary
         token.transfer(_holder, _tokens, '0');
 

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import './ContributionForwarder.sol';
 
@@ -18,7 +18,7 @@ contract DistributedDirectContributionForwarder is ContributionForwarder {
     }
 
     // @TODO: should we use uint256 [] for receivers & proportions?
-    function DistributedDirectContributionForwarder(
+    constructor(
         uint256 _proportionAbsMax, address[] _receivers, uint256[] _proportions
     )
     public
@@ -65,7 +65,7 @@ contract DistributedDirectContributionForwarder is ContributionForwarder {
 
             receiver.receiver.transfer(value);
 
-            ContributionForwarded(receiver.receiver, value);
+            emit ContributionForwarded(receiver.receiver, value);
         }
 
         weiForwarded = weiForwarded.add(transferred);

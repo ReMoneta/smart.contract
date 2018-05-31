@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './CrowdsaleAgent.sol';
@@ -23,7 +23,7 @@ contract MintableCrowdsaleBonusOnSoldTokensAndSuccessAgent is CrowdsaleAgent {
     address public bonusAddress;
     uint256 public bonusTokens;
 
-    function MintableCrowdsaleBonusOnSoldTokensAndSuccessAgent(
+    constructor(
         Crowdsale _crowdsale, MintableToken _token,
         uint256 _tokensSoldGoal, address _bonusAddress, uint256 _bonusTokens
     )
@@ -62,7 +62,7 @@ contract MintableCrowdsaleBonusOnSoldTokensAndSuccessAgent is CrowdsaleAgent {
 
     /// @notice Takes actions on state change,
     /// un-pause tokens and disable minting on Crowdsale success
-    /// Mint tokens if goal is reached
+    /// emit Mint tokens if goal is reached
     /// @param _state Crowdsale.State
     function onStateChange(Crowdsale.State _state) public onlyCrowdsale() {
         if (_state == Crowdsale.State.Success && goalAchieved == false) {

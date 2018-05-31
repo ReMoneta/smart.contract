@@ -1,10 +1,10 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.23;
 
 import '../REMToken.sol';
 
 contract REMTokenTest is REMToken {
 
-    function REMTokenTest(uint256 _unlockTokensTime) public
+    constructor(uint256 _unlockTokensTime) public
     REMToken(_unlockTokensTime) {
 
     }

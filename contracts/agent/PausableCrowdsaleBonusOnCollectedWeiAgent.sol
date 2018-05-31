@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './CrowdsaleAgent.sol';
@@ -27,7 +27,7 @@ contract PausableCrowdsaleBonusOnCollectedWeiAgent is CrowdsaleAgent {
     uint256 public bonusTokens;
     bool public _isInitialized;
 
-    function PausableCrowdsaleBonusOnCollectedWeiAgent(
+    constructor(
         Crowdsale _crowdsale, PausableToken _token, TokenAllocator _tokenAllocator,
         uint256 _weiCollectedGoal, address _bonusAddress, uint256 _bonusTokens
     )

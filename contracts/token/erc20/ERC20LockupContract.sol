@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity ^0.4.23;
 
 import '../../../node_modules/zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
 import '../../Ownable.sol';
@@ -7,7 +7,7 @@ import '../../LockupContract.sol';
 
 contract ERC20LockupContract is LockupContract, StandardToken {
 
-    function ERC20LockupContract(uint256 _lockPeriod, uint256 _initialUnlock, uint256 _releasePeriod) public
+    constructor(uint256 _lockPeriod, uint256 _initialUnlock, uint256 _releasePeriod) public
         LockupContract(_lockPeriod, _initialUnlock, _releasePeriod) {
     }
 

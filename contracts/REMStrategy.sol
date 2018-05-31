@@ -5,7 +5,7 @@ import './pricing/USDDateTiersPricingStrategy.sol';
 
 contract REMStrategy is USDDateTiersPricingStrategy {
 
-    function REMStrategy(
+    constructor(
         uint256[] emptyArray,
         uint256[2] _preIcoPeriods,
         uint256[2] _icoPeriods,

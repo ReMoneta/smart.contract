@@ -15,7 +15,7 @@ contract ERC223CrowdsaleAgent is CrowdsaleAgent {
     ERC223Token public token;
     bool public _isInitialized;
 
-    function ERC223CrowdsaleAgent(Crowdsale _crowdsale, ERC223Token _token)
+    constructor(Crowdsale _crowdsale, ERC223Token _token)
     public CrowdsaleAgent(_crowdsale)
     {
         crowdsale = _crowdsale;

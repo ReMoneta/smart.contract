@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import '../../../../node_modules/minimetoken/contracts/MiniMeToken.sol';
 import '../../../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -13,7 +13,7 @@ contract MiniMeERC20 is IErc20, MiniMeToken {
 
     string public standard;
 
-    function MiniMeERC20(
+    constructor(
         address _tokenFactory,
         address _parentToken,
         uint _parentSnapShotBlock,

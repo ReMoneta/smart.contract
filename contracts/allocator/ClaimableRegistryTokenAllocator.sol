@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -22,7 +22,7 @@ contract ClaimableRegistryTokenAllocator is TokenAllocator {
     mapping(address => uint256) public claimableHolders;
     ClaimableToken public token;
 
-    function ClaimableRegistryTokenAllocator(ClaimableToken _token, uint256 _maxSupply) public {
+    constructor(ClaimableToken _token, uint256 _maxSupply) public {
         require(_maxSupply > 0);
         maxSupply = _maxSupply;
         token = _token;

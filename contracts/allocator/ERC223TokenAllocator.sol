@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
 import './TokenAllocator.sol';
@@ -14,7 +14,7 @@ contract ERC223TokenAllocator is TokenAllocator {
 
     ERC223Token public token;
 
-    function ERC223TokenAllocator(ERC223Token _token) public {
+    constructor(ERC223Token _token) public {
         require(address(0) != address(_token));
         token = _token;
     }

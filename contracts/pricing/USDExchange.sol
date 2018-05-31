@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import '../Ownable.sol';
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -27,7 +27,7 @@ contract USDExchange is Ownable {
         _;
     }
 
-    function USDExchange(uint256 _etherPriceInUSD) public {
+    constructor(uint256 _etherPriceInUSD) public {
         etherPriceInUSD = _etherPriceInUSD;
         priceUpdateAt = block.timestamp;
         trustedAddresses[msg.sender] = true;
@@ -55,7 +55,7 @@ contract USDExchange is Ownable {
 
         priceUpdateAt = block.timestamp;
 
-        NewPriceTicker(_price);
+        emit NewPriceTicker(_price);
     }
 
     function parseInt(string _a, uint _b) internal pure returns (uint) {

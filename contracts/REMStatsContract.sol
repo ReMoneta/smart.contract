@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity ^0.4.23;
 
 import './REMCrowdSale.sol';
 import './token/erc20/MintableToken.sol';
@@ -12,7 +12,7 @@ contract REMStatsContract {
     REMCrowdSale public crowdsale;
     REMStrategy public strategy;
 
-    function REMStatsContract (
+    constructor(
         MintableToken _token,
         REMCrowdSale _crowdsale
     ) public {

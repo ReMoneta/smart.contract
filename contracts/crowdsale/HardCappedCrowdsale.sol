@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -20,7 +20,7 @@ contract HardCappedCrowdsale is CrowdsaleImpl {
 
     uint256 public hardCap;
 
-    function HardCappedCrowdsale(
+    constructor(
         TokenAllocator _allocator,
         ContributionForwarder _contributionForwarder,
         PricingStrategy _pricingStrategy,
@@ -30,9 +30,7 @@ contract HardCappedCrowdsale is CrowdsaleImpl {
         bool _allowSigned,
         bool _allowAnonymous,
         uint256 _hardCap
-    )
-    public
-    CrowdsaleImpl(
+    ) public CrowdsaleImpl(
         _allocator,
         _contributionForwarder,
         _pricingStrategy,
@@ -41,8 +39,7 @@ contract HardCappedCrowdsale is CrowdsaleImpl {
         _allowWhitelisted,
         _allowSigned,
         _allowAnonymous
-    )
-    {
+    ) {
         hardCap = _hardCap;
     }
 
@@ -51,12 +48,20 @@ contract HardCappedCrowdsale is CrowdsaleImpl {
         State state = super.getState();
 
         if (state == State.InCrowdsale) {
-            if (tokensSold == hardCap) {
+            if (isHardCapAchieved(0, 0)) {
                 return State.Success;
             }
         }
 
         return state;
+    }
+
+    function isHardCapAchieved(uint256 _value, uint256 _ethValue) public view returns (bool) {
+        _ethValue = _ethValue;
+        if (hardCap <= tokensSold.add(_value)) {
+            return true;
+        }
+        return false;
     }
 
     function internalContribution(address _contributor, uint256 _wei) internal {
@@ -73,7 +78,7 @@ contract HardCappedCrowdsale is CrowdsaleImpl {
             _contributor, tokensAvailable, tokensSold, msg.value, collectedWei);
 
         require(tokens < tokensAvailable);
-        require(hardCap > tokensSold.add(tokens));
+        require(false == isHardCapAchieved(tokens, msg.value));
 
         tokensSold = tokensSold.add(tokens);
 
@@ -83,7 +88,7 @@ contract HardCappedCrowdsale is CrowdsaleImpl {
             contributionForwarder.forward.value(msg.value)();
         }
 
-        Contribution(_contributor, _wei, tokensExcludingBonus, bonus);
+        emit Contribution(_contributor, _wei, tokensExcludingBonus, bonus);
     }
 }
 

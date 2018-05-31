@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './CrowdsaleAgent.sol';
@@ -18,7 +18,7 @@ contract MintableCrowdsaleOnSuccessAgent is CrowdsaleAgent {
     MintableToken public token;
     bool public _isInitialized;
 
-    function MintableCrowdsaleOnSuccessAgent(Crowdsale _crowdsale, MintableToken _token)
+    constructor(Crowdsale _crowdsale, MintableToken _token)
     public CrowdsaleAgent(_crowdsale)
     {
         crowdsale = _crowdsale;

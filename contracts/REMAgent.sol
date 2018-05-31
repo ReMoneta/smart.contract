@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './agent/MintableMultipleCrowdsaleOnSuccessAgent.sol';
@@ -11,7 +11,7 @@ contract REMAgent is MintableMultipleCrowdsaleOnSuccessAgent {
 
     REMToken public token;
 
-    function REMAgent(Crowdsale[] _crowdsales, REMToken _token)
+    constructor(Crowdsale[] _crowdsales, REMToken _token)
     public MintableMultipleCrowdsaleOnSuccessAgent(_crowdsales, _token)
     {
         token = _token;

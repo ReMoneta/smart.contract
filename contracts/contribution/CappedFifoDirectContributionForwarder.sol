@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import './ContributionForwarder.sol';
 
@@ -17,7 +17,7 @@ contract CappedFifoDirectContributionForwarder is ContributionForwarder {
     }
 
     // @TODO: should we use uint256 [] for receivers & proportions?
-    function CappedFifoDirectContributionForwarder(
+    constructor(
         address[] _receivers, uint256[] _proportions
     )
     public
@@ -50,7 +50,7 @@ contract CappedFifoDirectContributionForwarder is ContributionForwarder {
 
                     receiver.receiver.transfer(transferValue);
 
-                    ContributionForwarded(receiver.receiver, transferValue);
+                    emit ContributionForwarded(receiver.receiver, transferValue);
                 } else {
                     receiver.forwardedWei = receiver.forwardedWei.add(remainingValue);
 
@@ -60,7 +60,7 @@ contract CappedFifoDirectContributionForwarder is ContributionForwarder {
 
                     receiver.receiver.transfer(transferValue);
 
-                    ContributionForwarded(receiver.receiver, remainingValue);
+                    emit ContributionForwarded(receiver.receiver, remainingValue);
                 }
             }
         }

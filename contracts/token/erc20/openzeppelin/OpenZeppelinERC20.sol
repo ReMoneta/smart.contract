@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import '../../../../node_modules/zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
 import '../../../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -16,7 +16,7 @@ contract OpenZeppelinERC20 is StandardToken, Ownable {
     string public symbol;
     string public standard;
 
-    function OpenZeppelinERC20(
+    constructor(
         uint256 _totalSupply,
         string _tokenName,
         uint8 _decimals,

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -22,7 +22,7 @@ contract EtherTiersPricingStrategy is PricingStrategy {
     Tier[] public tiers;
     uint256 public decimals;
 
-    function EtherTiersPricingStrategy(uint256[] _tiers, uint256 _decimals) public {
+    constructor(uint256[] _tiers, uint256 _decimals) public {
         decimals = _decimals;
         require(_tiers.length % 2 == 0);
 

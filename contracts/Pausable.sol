@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './Ownable.sol';
@@ -24,7 +24,7 @@ contract Pausable is Ownable {
         _;
     }
 
-    function Pausable(bool _paused) public {
+    constructor(bool _paused) public {
         paused = _paused;
         pauseAgents[msg.sender] = true;
     }

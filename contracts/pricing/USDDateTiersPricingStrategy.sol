@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -49,7 +49,7 @@ contract USDDateTiersPricingStrategy is PricingStrategy, USDExchange {
     Tier[] public tiers;
     uint256 public decimals;
 
-    function USDDateTiersPricingStrategy(uint256[] _tiers, uint256 _decimals, uint256 _etherPriceInUSD) public
+    constructor(uint256[] _tiers, uint256 _decimals, uint256 _etherPriceInUSD) public
     USDExchange(_etherPriceInUSD) {
         decimals = _decimals;
         trustedAddresses[msg.sender] = true;

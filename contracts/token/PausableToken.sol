@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import '../Pausable.sol';
 
@@ -8,7 +8,7 @@ import '../Pausable.sol';
 /// @dev Base class
 contract PausableToken is Pausable {
 
-    function PausableToken(bool _paused) public Pausable(_paused) {
+    constructor(bool _paused) public Pausable(_paused) {
 
     }
 

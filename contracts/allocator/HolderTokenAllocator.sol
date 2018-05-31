@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -15,7 +15,7 @@ contract HolderTokenAllocator is TokenAllocator {
 
     IErc20 public token;
 
-    function HolderTokenAllocator(IErc20 _token) public {
+    constructor(IErc20 _token) public {
         require(address(0) != address(_token));
         token = _token;
     }

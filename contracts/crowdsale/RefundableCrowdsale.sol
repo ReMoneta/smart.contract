@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
@@ -23,7 +23,7 @@ contract RefundableCrowdsale is HardCappedCrowdsale {
 
     event Refund(address _holder, uint256 _wei, uint256 _tokens);
 
-    function RefundableCrowdsale(
+    constructor(
         TokenAllocator _allocator,
         ContributionForwarder _contributionForwarder,
         PricingStrategy _pricingStrategy,
@@ -91,7 +91,7 @@ contract RefundableCrowdsale is HardCappedCrowdsale {
         // transfer only if softcap is reached
         if (tokensSold >= softCap) {
             if (msg.value > 0) {
-                contributionForwarder.forward.value(this.balance)();
+                contributionForwarder.forward.value(address(this).balance)();
             }
         } else {
             // store contributor if it is not stored before
@@ -101,7 +101,7 @@ contract RefundableCrowdsale is HardCappedCrowdsale {
             contributorsWei[_contributor] = contributorsWei[_contributor].add(msg.value);
         }
         crowdsaleAgent.onContribution(_contributor, _wei, tokens, bonus);
-        Contribution(_contributor, _wei, tokensExcludingBonus, bonus);
+        emit Contribution(_contributor, _wei, tokensExcludingBonus, bonus);
     }
 
     function internalRefund(address _holder) internal {
@@ -118,7 +118,7 @@ contract RefundableCrowdsale is HardCappedCrowdsale {
 
         _holder.transfer(value);
 
-        Refund(_holder, value, burnedTokens);
+        emit Refund(_holder, value, burnedTokens);
     }
 }
 

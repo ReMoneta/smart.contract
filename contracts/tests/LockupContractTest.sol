@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity ^0.4.23;
 
 import '../LockupContract.sol';
 
@@ -6,7 +6,7 @@ import '../LockupContract.sol';
 contract LockupContractTest is LockupContract {
 
 
-    function LockupContractTest (uint256 _lockPeriod, uint256 _initialUnlock, uint256 _releasePeriod) public
+    constructor(uint256 _lockPeriod, uint256 _initialUnlock, uint256 _releasePeriod) public
     LockupContract(_lockPeriod, _initialUnlock, _releasePeriod){
     }
 

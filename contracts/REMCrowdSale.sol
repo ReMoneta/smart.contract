@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity ^0.4.23;
 
 import './crowdsale/RefundableCrowdsale.sol';
 import './contribution/DistributedDirectContributionForwarder.sol';
@@ -16,7 +16,7 @@ contract REMCrowdSale is RefundableCrowdsale {
     uint256 public  activeTier;
     mapping(address => uint256) public contributorBonuses;
 
-    function REMCrowdSale(
+    constructor(
         MintableTokenAllocator _allocator,
         DistributedDirectContributionForwarder _contributionForwarder,
         USDDateTiersPricingStrategy _pricingStrategy,

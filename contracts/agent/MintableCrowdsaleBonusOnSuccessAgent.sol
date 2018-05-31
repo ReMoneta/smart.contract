@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 
 import './CrowdsaleAgent.sol';
@@ -21,7 +21,7 @@ contract MintableCrowdsaleBonusOnSuccessAgent is CrowdsaleAgent {
     address public bonusAddress;
     uint256 public bonusTokens;
 
-    function MintableCrowdsaleBonusOnSuccessAgent(
+    constructor(
         Crowdsale _crowdsale, MintableToken _token,
         address _bonusAddress, uint256 _bonusTokens
     )

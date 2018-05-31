@@ -1,4 +1,4 @@
-pragma solidity 0.4.19;
+pragma solidity ^0.4.23;
 
 
 import './token/erc20/TimeLockedToken.sol';
@@ -33,10 +33,10 @@ contract REMToken is TimeLockedToken, LockupContract, AllocationLockupContract, 
     }
 
     // _unlockTokensTime - 30 days after ICO
-    function REMToken(uint256 _unlockTokensTime) public
+    constructor(uint256 _unlockTokensTime) public
     TimeLockedToken(_unlockTokensTime)
     AllocationLockupContract()
-    LockupContract(uint256(1 years).div(2), 10, 1 days)
+    LockupContract(uint256(365 days).div(2), 10, 1 days)
     OpenZeppelinERC20(0, 'Remoneta ERC 20 Token', 18, 'REM', false)
     MintableToken(uint256(400000000000).mul(10 ** 18), 0, true) {
 
