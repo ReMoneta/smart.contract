@@ -5,15 +5,10 @@ import './pricing/USDDateTiersPricingStrategy.sol';
 
 contract REMStrategy is USDDateTiersPricingStrategy {
 
-    constructor(
-        uint256[] emptyArray,
-        uint256[2] _preIcoPeriods,
-        uint256[2] _icoPeriods,
-        uint256 _etherPriceInUSD
-    ) public
-    USDDateTiersPricingStrategy(emptyArray, 18, _etherPriceInUSD) {
-        tiers.push(Tier(uint256(10000).mul(10**18), 0, 0, 10000000, _preIcoPeriods[0], _preIcoPeriods[1]));
-        tiers.push(Tier(uint256(10000).mul(10**18), 0, 0, 1000000, _icoPeriods[0], _icoPeriods[1]));
+    constructor(uint256[] emptyArray, uint256[2] _preIcoPeriods, uint256[2] _icoPeriods, uint256 _etherPriceInUSD)
+    public USDDateTiersPricingStrategy(emptyArray, 18, _etherPriceInUSD) {
+        tiers.push(Tier(uint256(10000).mul(10 ** 18), 0, 0, 10000000, _preIcoPeriods[0], _preIcoPeriods[1]));
+        tiers.push(Tier(uint256(10000).mul(10 ** 18), 0, 0, 1000000, _icoPeriods[0], _icoPeriods[1]));
     }
 
     function getArrayOfTiers() public view returns (uint256[12] tiersData) {

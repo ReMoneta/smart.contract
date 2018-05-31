@@ -22,21 +22,21 @@ contract REMCrowdSale is RefundableCrowdsale {
         USDDateTiersPricingStrategy _pricingStrategy,
         uint256 _startTime,
         uint256 _endTime,
-        uint256 _softCap,// (5000000/ 0.01)*100*10^18
+        uint256 _softCap, // (5000000/ 0.01)*100*10^18
         uint256 _hardCap // (5000000/ 0.01)*100*10^18
     ) public
-        RefundableCrowdsale(
-            _allocator,
-            _contributionForwarder,
-            _pricingStrategy,
-            _startTime,
-            _endTime,
-            true,
-            true,
-            false,
-            _softCap,
-            _hardCap
-        )
+    RefundableCrowdsale(
+        _allocator,
+        _contributionForwarder,
+        _pricingStrategy,
+        _startTime,
+        _endTime,
+        true,
+        true,
+        false,
+        _softCap,
+        _hardCap
+    )
     {
         pricingStrategy = USDDateTiersPricingStrategy(_pricingStrategy);
     }

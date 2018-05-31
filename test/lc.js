@@ -58,7 +58,7 @@ contract('LockupContract', function (accounts) {
         await assert.equal(new BigNumber(result).valueOf(), starting, "startingAt is not equal")
         result = await token.lockedAmount.call(accounts[2],1)
         await assert.equal(new BigNumber(result).valueOf(), 1000, "lockedBalance is not equal")
-        result = await token.AllowedBalance.call(
+        result = await token.allowedBalance.call(
             accounts[2],
             starting+100,
             1000
@@ -130,7 +130,7 @@ contract('LockupContract', function (accounts) {
 
             await token.log(accounts[2], 100, starting+500)
                 .then(Utils.receiptShouldSucceed)
-            result = await token.AllowedBalance.call(
+            result = await token.allowedBalance.call(
                 accounts[2],
                 starting+500,
                 1100
@@ -149,7 +149,7 @@ contract('LockupContract', function (accounts) {
             let starting = parseInt(new Date().getTime() / 1000)
             await token.log(accounts[2], 1000, starting - 3601)
 
-            result = await token.AllowedBalance.call(
+            result = await token.allowedBalance.call(
                 accounts[2],
                 starting,
                 1000
@@ -168,25 +168,25 @@ contract('LockupContract', function (accounts) {
             let starting = parseInt(new Date().getTime() / 1000)
             await token.log(accounts[2], 1000, starting)
 
-            result = await token.AllowedBalance.call(
+            result = await token.allowedBalance.call(
                 accounts[2],
                 starting,
                 1000
             )
             await assert.equal(new BigNumber(result).valueOf(), 0, "lockedBalance is not equal")
-            result = await token.AllowedBalance.call(
+            result = await token.allowedBalance.call(
                 accounts[2],
                 starting+400,
                 1000
             )
             await assert.equal(new BigNumber(result).valueOf(), 0, "lockedBalance is not equal")
-            result = await token.AllowedBalance.call(
+            result = await token.allowedBalance.call(
                 accounts[2],
                 starting+501,
                 1000
             )
             await assert.equal(new BigNumber(result).valueOf(), 138, "lockedBalance is not equal")
-            result = await token.AllowedBalance.call(
+            result = await token.allowedBalance.call(
                 accounts[2],
                 starting+1001,
                 1000

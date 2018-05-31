@@ -154,7 +154,7 @@ contract('Allocation', function (accounts) {
         console.log(await token.lockedAmount.call(accounts[2],6));
         console.log(await token.lockedAmount.call(accounts[2],7));
 
-        console.log('bal',new BigNumber(await token.AllowedBalance.call(
+        console.log('bal',new BigNumber(await token.allowedBalance.call(
             accounts[2],
             starting+33,
             200

@@ -49,7 +49,7 @@ contract TokenAllocation is Ownable, Referral {
     Referral(0, _allocator, _crowdsale, false) {
         require(address(0) != address(_crowdsale));
         crowdsale = REMCrowdSale(_crowdsale);
-        REMStrategy pricingStrategy = REMStrategy(address(crowdsale.pricingStrategy()));
+        pricingStrategy = REMStrategy(address(crowdsale.pricingStrategy()));
         uint256[12] memory tiersData = pricingStrategy.getArrayOfTiers();
         vestingStartDate = tiersData[11].add(30 days);
     }
@@ -118,7 +118,7 @@ contract TokenAllocation is Ownable, Referral {
             _allocator,
             soldTokens.mul(4).div(100),
             vestingStartDate,
-            2 years,
+            uint256(365 days).mul(2), //2 years
             50,
             30 days
         );

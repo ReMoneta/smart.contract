@@ -78,7 +78,7 @@ contract AllocationLockupContract is LockupContract {
         return false;
     }
 
-    function AllowedBalance(
+    function allowedBalance(
         address _address,
         uint256 _time,
         uint256 _holderBalance

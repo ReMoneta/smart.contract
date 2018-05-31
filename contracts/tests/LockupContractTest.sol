@@ -24,7 +24,7 @@ contract LockupContractTest is LockupContract {
         );
     }
 
-    function AllowedBalance(
+    function allowedBalance(
         address _address,
         uint256 _time,
         uint256 _holderBalance
