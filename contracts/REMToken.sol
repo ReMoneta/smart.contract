@@ -81,8 +81,8 @@ contract REMToken is TimeLockedToken, LockupContract, AllocationLockupContract, 
     }
 
     function isTransferAllowed(address _address, uint256 _value) public view returns (bool) {
-        return isTransferAllowedAllocation(_address, _value, block.timestamp, balanceOf(_address));
-        return isTransferAllowedInternal(_address, _value, block.timestamp, balanceOf(_address));
+        return isTransferAllowedAllocation(_address, _value, block.timestamp, balanceOf(_address))
+        && isTransferAllowedInternal(_address, _value, block.timestamp, balanceOf(_address));
     }
 
     function updateExcludedAddress(address _address, bool _status) public onlyOwner {

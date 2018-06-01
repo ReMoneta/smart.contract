@@ -1,9 +1,7 @@
 pragma solidity ^0.4.23;
 
-
 import './agent/MintableMultipleCrowdsaleOnSuccessAgent.sol';
 import './REMToken.sol';
-
 
 
 contract REMAgent is MintableMultipleCrowdsaleOnSuccessAgent {
