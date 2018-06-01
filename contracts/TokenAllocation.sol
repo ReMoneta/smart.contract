@@ -22,7 +22,7 @@ import './Referral.sol';
 
 
 contract TokenAllocation is Ownable, Referral {
-    //    using SafeERC20 for ERC20Basic;
+
     using SafeMath for uint256;
 
     address public team = 0x0;
@@ -42,10 +42,7 @@ contract TokenAllocation is Ownable, Referral {
     event BonusSent(address receiver, uint256 amount);
     event ReferralSent(address receiver, uint256 amount);
 
-    constructor(
-        REMCrowdSale _crowdsale,
-        address _allocator
-    ) public Referral(0, _allocator, _crowdsale, false) {
+    constructor(REMCrowdSale _crowdsale, address _allocator) public Referral(0, _allocator, _crowdsale, false) {
         require(address(0) != address(_crowdsale));
         crowdsale = REMCrowdSale(_crowdsale);
         pricingStrategy = REMStrategy(address(crowdsale.pricingStrategy()));
