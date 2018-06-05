@@ -166,7 +166,7 @@ contract CrowdsaleImpl is Crowdsale, Ownable {
         uint256 bonus;
 
         (tokens, tokensExcludingBonus, bonus) = pricingStrategy.getTokens(
-            _contributor, tokensAvailable, tokensSold, msg.value, collectedWei);
+            _contributor, tokensAvailable, tokensSold, _wei, collectedWei);
 
         require(tokens < tokensAvailable);
         tokensSold = tokensSold.add(tokens);
