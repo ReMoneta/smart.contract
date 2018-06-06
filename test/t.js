@@ -5,7 +5,8 @@ var
     REMAllocation = artifacts.require("./TokenAllocation.sol"),
     MintableTokenAllocator = artifacts.require("./allocator/MintableTokenAllocator.sol"),
     DistributedDirectContributionForwarder = artifacts.require("./contribution/DistributedDirectContributionForwarder.sol"),
-    MintableMultipleCrowdsaleOnSuccessAgent = artifacts.require("./agent/MintableMultipleCrowdsaleOnSuccessAgent.sol"),
+    REMAgent = artifacts.require("./REMAgent.sol"),
+    REMStatsContract = artifacts.require("./REMStatsContract.sol"),
 
     Utils = require("./utils"),
     BigNumber = require('BigNumber.js'),
@@ -37,12 +38,14 @@ async function deploy() {
         new BigNumber('50000000000').mul(precision)
         );
 
-    const agent = await MintableMultipleCrowdsaleOnSuccessAgent.new([crowdsale.address], token.address);
+
+    const agent = await REMAgent.new(crowdsale.address, token.address);
     const allocation = await REMAllocation.new(crowdsale.address,allocator.address);
+    const stats = await REMStatsContract.new(token.address,crowdsale.address);
     await allocator.addCrowdsales(allocation.address);
     await token.updateLockupAgent(allocation.address,true);
-
-
+    await token.updateLockupAgent(agent.address,true);
+    await crowdsale.setCrowdsaleAgent(agent.address);
     return {
         token,
         allocator,
@@ -50,7 +53,8 @@ async function deploy() {
         strategy,
         crowdsale,
         agent,
-        allocation
+        allocation,
+        stats
     };
 }
 
@@ -86,16 +90,20 @@ contract('Token', function (accounts) {
             contributionForwarder,
             strategy,
             crowdsale,
-            agent
+            agent,
+            allocation,
+            stats
         } = await deploy();
 
+        let a = await stats.getStats.call(new BigNumber('1').mul(precision).valueOf());
+        console.log(await a[7]);
         let currentState = await crowdsale.getState()//Initializing
         assert.equal(currentState, 1, "state doesn't match");
 
         await token.updateMintingAgent(allocator.address, true);
         await crowdsale.setCrowdsaleAgent(agent.address);
         await allocator.addCrowdsales(crowdsale.address);
-
+        await token.updateLockupAgent(agent.address,true);
         currentState = await crowdsale.getState()//InCrowdsale
         assert.equal(new BigNumber(currentState).valueOf(), 3, "state doesn't match");
 
@@ -171,6 +179,8 @@ contract('Token', function (accounts) {
         await token.updateExcludedAddress(accounts[4], true)
             .then(Utils.receiptShouldSucceed)
         assert.equal((await token.excludedAddresses.call(accounts[4])).valueOf(), true,'excludedAddresses is not equal')
+        assert.equal(await token.isTransferAllowed.call(accounts[4],100), true,'isTransferAllowed is not equal')
+
         await token.transfer(accounts[2], 100, {from:accounts[4]})
             .then(Utils.receiptShouldSucceed)
         await Utils.balanceShouldEqualTo(token, accounts[2], 0)

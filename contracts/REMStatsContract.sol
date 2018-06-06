@@ -21,6 +21,18 @@ contract REMStatsContract {
         strategy = REMStrategy(crowdsale.pricingStrategy());
     }
 
+    function getTokens(
+        uint256 _weiAmount
+    ) public view returns (uint256 tokens, uint256 tokensExcludingBonus, uint256 bonus) {
+        return strategy.getTokens(
+            address(0),
+            uint256(crowdsale.hardCap()).sub(crowdsale.tokensSold()),
+            crowdsale.tokensSold(),
+            _weiAmount,
+            0
+        );
+    }
+
     function getStats(uint256 _ethPerBtc) public view returns (
         uint256 start,
         uint256 end,

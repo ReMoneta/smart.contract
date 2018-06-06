@@ -22,7 +22,6 @@ import './AllocationLockupContract.sol';
 
 contract REMToken is TimeLockedToken, LockupContract, AllocationLockupContract, OpenZeppelinERC20, BurnableToken, MintableToken {
 
-    mapping(address => bool) public excludedAddresses;
     mapping(address => uint256) public intermediateBalances;
     mapping(address => bool) public claimed;
 

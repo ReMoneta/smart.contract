@@ -1,28 +1,31 @@
 pragma solidity ^0.4.23;
 
 
-import './CrowdsaleMultipleAgent.sol';
+import './CrowdsaleAgent.sol';
 import '../crowdsale/Crowdsale.sol';
 import '../token/erc20/MintableToken.sol';
 
 
-/// @title MintableMultipleCrowdsaleOnSuccessAgent
+/// @title MintableCrowdsaleOnSuccessAgent
 /// @author Applicature
 /// @notice Contract which takes actions on state change and contribution
 /// un-pause tokens and disable minting on Crowdsale success
 /// @dev implementation
-contract MintableMultipleCrowdsaleOnSuccessAgent is CrowdsaleMultipleAgent {
+contract MintableCrowdsaleOnSuccessAgent is CrowdsaleAgent {
 
 
+    Crowdsale public crowdsale;
     MintableToken public token;
     bool public _isInitialized;
 
-    constructor(Crowdsale[] _crowdsales, MintableToken _token)
-    public CrowdsaleMultipleAgent(_crowdsales)
+    constructor(Crowdsale _crowdsale, MintableToken _token)
+    public CrowdsaleAgent(_crowdsale)
     {
+        crowdsale = _crowdsale;
         token = _token;
 
-        if (address(0) != address(_token)) {
+        if (address(0) != address(_token) &&
+        address(0) != address(_crowdsale)) {
             _isInitialized = true;
         } else {
             _isInitialized = false;
@@ -49,16 +52,9 @@ contract MintableMultipleCrowdsaleOnSuccessAgent is CrowdsaleMultipleAgent {
     /// un-pause tokens and disable minting on Crowdsale success
     /// @param _state Crowdsale.State
     function onStateChange(Crowdsale.State _state) public onlyCrowdsale() {
-        if (_state == Crowdsale.State.Success || _state == Crowdsale.State.Finalized) {
+        if (_state == Crowdsale.State.Success) {
             token.disableMinting();
         }
-    }
-    /// @notice Takes actions on refund
-    function onRefund(address _contributor, uint256 _tokens) public onlyCrowdsale() returns (uint256 burned) {
-        _contributor = _contributor;
-        _tokens = _tokens;
-        burned = burned;
-        // TODO: add impl
     }
 }
 

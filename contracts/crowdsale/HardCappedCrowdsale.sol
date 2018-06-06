@@ -87,7 +87,7 @@ contract HardCappedCrowdsale is CrowdsaleImpl {
         if (msg.value > 0) {
             contributionForwarder.forward.value(msg.value)();
         }
-
+        crowdsaleAgent.onContribution(_contributor, _wei, tokensExcludingBonus, bonus);
         emit Contribution(_contributor, _wei, tokensExcludingBonus, bonus);
     }
 }

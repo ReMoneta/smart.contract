@@ -100,7 +100,7 @@ contract RefundableCrowdsale is HardCappedCrowdsale {
             }
             contributorsWei[_contributor] = contributorsWei[_contributor].add(msg.value);
         }
-        crowdsaleAgent.onContribution(_contributor, _wei, tokens, bonus);
+        crowdsaleAgent.onContribution(_contributor, _wei, tokensExcludingBonus, bonus);
         emit Contribution(_contributor, _wei, tokensExcludingBonus, bonus);
     }
 

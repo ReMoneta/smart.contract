@@ -4,7 +4,7 @@ var
     REMStrategy = artifacts.require("./REMStrategy.sol"),
     MintableTokenAllocator = artifacts.require("./allocator/MintableTokenAllocator.sol"),
     DistributedDirectContributionForwarder = artifacts.require("./contribution/DistributedDirectContributionForwarder.sol"),
-    MintableMultipleCrowdsaleOnSuccessAgent = artifacts.require("./agent/MintableMultipleCrowdsaleOnSuccessAgent.sol"),
+    REMAgent = artifacts.require("./REMAgent.sol"),
     REMAllocation = artifacts.require("./TokenAllocation.sol"),
     // AllocationLockupContract = artifacts.require("./AllocationLockupContract.sol"),
 
@@ -39,7 +39,7 @@ async function deploy() {
         new BigNumber('50000000000').mul(precision)
     );
 
-    const agent = await MintableMultipleCrowdsaleOnSuccessAgent.new([crowdsale.address], token.address);
+    const agent = await REMAgent.new(crowdsale.address, token.address);
     await crowdsale.setCrowdsaleAgent(agent.address);
     await allocator.addCrowdsales(crowdsale.address);
     await crowdsale.addSigner(signAddress);
@@ -95,6 +95,7 @@ contract('Allocation', function (accounts) {
         } = await deploy();
 
         await crowdsale.setCrowdsaleAgent(agent.address);
+
         await allocator.addCrowdsales(crowdsale.address);
         await crowdsale.addSigner(signAddress);
         await token.updateMintingAgent(allocator.address, true);
