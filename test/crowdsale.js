@@ -295,7 +295,7 @@ contract('Token', function (accounts) {
                     // disableMinting: false,
                     decimals: 18,
                     name: 'Remoneta ERC 20 Token',
-                    symbol: 'REM',
+                    symbol: 'RET',
                     balanceOf: [
                         {[accounts[0]]: new BigNumber('0').mul(precision).valueOf()},
                         {[accounts[1]]: new BigNumber('0').mul(precision).valueOf()},
@@ -431,7 +431,7 @@ contract('Token', function (accounts) {
                 // disableMinting: false,
                 decimals: 18,
                 name: 'Remoneta ERC 20 Token',
-                symbol: 'REM',
+                symbol: 'RET',
                 balanceOf: [
                     {[accounts[0]]: new BigNumber('0').mul(precision).valueOf()},
                     {[accounts[1]]: new BigNumber('0').mul(precision).valueOf()},
@@ -534,7 +534,7 @@ contract('Token', function (accounts) {
                 // disableMinting: false,
                 decimals: 18,
                 name: 'Remoneta ERC 20 Token',
-                symbol: 'REM',
+                symbol: 'RET',
                 balanceOf: [
                     {[accounts[0]]: new BigNumber('0').mul(precision).valueOf()},
                     {[accounts[1]]: new BigNumber('0').mul(precision).valueOf()},

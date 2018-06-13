@@ -35,7 +35,7 @@ contract REMToken is TimeLockedToken, LockupContract, AllocationLockupContract, 
     constructor(uint256 _unlockTokensTime) public TimeLockedToken(_unlockTokensTime)
     AllocationLockupContract()
     LockupContract(uint256(365 days).div(2), 10, 1 days)
-    OpenZeppelinERC20(0, 'Remoneta ERC 20 Token', 18, 'REM', false)
+    OpenZeppelinERC20(0, 'Remoneta ERC 20 Token', 18, 'RET', false)
     MintableToken(uint256(400000000000).mul(10 ** 18), 0, true) {
 
     }
