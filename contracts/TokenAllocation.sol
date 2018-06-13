@@ -1,9 +1,9 @@
 pragma solidity ^0.4.23;
 
 import './allocator/MintableTokenAllocator.sol';
-import './REMCrowdSale.sol';
-import './REMStrategy.sol';
-import './REMToken.sol';
+import './RETCrowdSale.sol';
+import './RETStrategy.sol';
+import './RETToken.sol';
 import './Referral.sol';
 
 /*
@@ -31,8 +31,8 @@ contract TokenAllocation is Ownable, Referral {
     address public earlyInvestors = 0x0;
     address public bancor = 0x0;
 
-    REMCrowdSale public crowdsale;
-    REMStrategy public pricingStrategy;
+    RETCrowdSale public crowdsale;
+    RETStrategy public pricingStrategy;
 
     uint256 public vestingStartDate;
 
@@ -42,17 +42,17 @@ contract TokenAllocation is Ownable, Referral {
     event BonusSent(address receiver, uint256 amount);
     event ReferralSent(address receiver, uint256 amount);
 
-    constructor(REMCrowdSale _crowdsale, address _allocator) public Referral(0, _allocator, _crowdsale, false) {
+    constructor(RETCrowdSale _crowdsale, address _allocator) public Referral(0, _allocator, _crowdsale, false) {
         require(address(0) != address(_crowdsale));
-        crowdsale = REMCrowdSale(_crowdsale);
-        pricingStrategy = REMStrategy(address(crowdsale.pricingStrategy()));
+        crowdsale = RETCrowdSale(_crowdsale);
+        pricingStrategy = RETStrategy(address(crowdsale.pricingStrategy()));
         uint256[12] memory tiersData = pricingStrategy.getArrayOfTiers();
         vestingStartDate = tiersData[11].add(30 days);
     }
 
     function setCrowdsale(address _crowdsale) public onlyOwner {
         super.setCrowdsale(_crowdsale);
-        pricingStrategy = REMStrategy(crowdsale.pricingStrategy());
+        pricingStrategy = RETStrategy(crowdsale.pricingStrategy());
         uint256[12] memory tiersData = pricingStrategy.getArrayOfTiers();
         vestingStartDate = tiersData[11].add(30 days);
     }
@@ -146,7 +146,7 @@ contract TokenAllocation is Ownable, Referral {
             emit BonusSent(_address, _amount[1]);
             emit ReferralSent(_address, _amount[2]);
         }
-        REMToken token = REMToken(address(_allocator.token()));
+        RETToken token = RETToken(address(_allocator.token()));
         token.setClaimState(_address, true);
     }
 
@@ -180,7 +180,7 @@ contract TokenAllocation is Ownable, Referral {
         uint256 _releasePeriod
     ) internal {
         require(_amount > 0);
-        REMToken token = REMToken(address(_allocator.token()));
+        RETToken token = RETToken(address(_allocator.token()));
         token.allocationLog(_address, _amount, _startingAt, _lockPeriod, _initialUnlock, _releasePeriod);
         _allocator.allocate(_address, _amount);
         token.setClaimState(_address, true);

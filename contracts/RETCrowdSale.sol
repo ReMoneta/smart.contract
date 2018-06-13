@@ -6,7 +6,7 @@ import './pricing/USDDateTiersPricingStrategy.sol';
 import './allocator/MintableTokenAllocator.sol';
 
 
-contract REMCrowdSale is RefundableCrowdsale {
+contract RETCrowdSale is RefundableCrowdsale {
 
     USDDateTiersPricingStrategy public pricingStrategy;
 

@@ -1,12 +1,12 @@
 var
-    REMToken = artifacts.require("./test/REMTokenTest.sol"),
-    REMCrowdSale = artifacts.require("./REMCrowdSale.sol"),
-    REMStrategy = artifacts.require("./REMStrategy.sol"),
-    REMAllocation = artifacts.require("./TokenAllocation.sol"),
+    RETToken = artifacts.require("./test/RETTokenTest.sol"),
+    RETCrowdSale = artifacts.require("./RETCrowdSale.sol"),
+    RETStrategy = artifacts.require("./RETStrategy.sol"),
+    RETAllocation = artifacts.require("./TokenAllocation.sol"),
     MintableTokenAllocator = artifacts.require("./allocator/MintableTokenAllocator.sol"),
     DistributedDirectContributionForwarder = artifacts.require("./contribution/DistributedDirectContributionForwarder.sol"),
-    REMAgent = artifacts.require("./REMAgent.sol"),
-    REMStatsContract = artifacts.require("./REMStatsContract.sol"),
+    RETAgent = artifacts.require("./RETAgent.sol"),
+    RETStatsContract = artifacts.require("./RETStatsContract.sol"),
 
     Utils = require("./utils"),
     BigNumber = require('BigNumber.js'),
@@ -23,12 +23,12 @@ var abi = require('ethereumjs-abi'),
     BN = require('bn.js');
 
 async function deploy() {
-    const token = await REMToken.new(icoTill);
+    const token = await RETToken.new(icoTill);
     const allocator = await MintableTokenAllocator.new(token.address);
     const contributionForwarder = await DistributedDirectContributionForwarder.new(100, [etherHolder], [100]);
-    const strategy = await REMStrategy.new([], [icoSince, icoTill],[icoTill, icoTill+3600], 75045000);
+    const strategy = await RETStrategy.new([], [icoSince, icoTill],[icoTill, icoTill+3600], 75045000);
 
-    const crowdsale = await REMCrowdSale.new(
+    const crowdsale = await RETCrowdSale.new(
         allocator.address,
         contributionForwarder.address,
         strategy.address,
@@ -39,9 +39,9 @@ async function deploy() {
         );
 
 
-    const agent = await REMAgent.new(crowdsale.address, token.address);
-    const allocation = await REMAllocation.new(crowdsale.address,allocator.address);
-    const stats = await REMStatsContract.new(token.address,crowdsale.address);
+    const agent = await RETAgent.new(crowdsale.address, token.address);
+    const allocation = await RETAllocation.new(crowdsale.address,allocator.address);
+    const stats = await RETStatsContract.new(token.address,crowdsale.address);
     await allocator.addCrowdsales(allocation.address);
     await token.updateLockupAgent(allocation.address,true);
     await token.updateLockupAgent(agent.address,true);

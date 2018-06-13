@@ -1,11 +1,11 @@
 pragma solidity ^0.4.23;
 
-import '../REMToken.sol';
+import '../RETToken.sol';
 
-contract REMTokenTest is REMToken {
+contract RETTokenTest is RETToken {
 
     constructor(uint256 _unlockTokensTime) public
-    REMToken(_unlockTokensTime) {
+    RETToken(_unlockTokensTime) {
 
     }
 

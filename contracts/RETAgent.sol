@@ -1,15 +1,15 @@
 pragma solidity ^0.4.23;
 
 import './agent/MintableCrowdsaleOnSuccessAgent.sol';
-import './REMToken.sol';
+import './RETToken.sol';
 
 
-contract REMAgent is MintableCrowdsaleOnSuccessAgent {
+contract RETAgent is MintableCrowdsaleOnSuccessAgent {
 
 
-    REMToken public token;
+    RETToken public token;
 
-    constructor(Crowdsale _crowdsale, REMToken _token)
+    constructor(Crowdsale _crowdsale, RETToken _token)
     public MintableCrowdsaleOnSuccessAgent(_crowdsale, _token)
     {
         token = _token;

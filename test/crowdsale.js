@@ -1,10 +1,10 @@
 var
-    REMToken = artifacts.require("./test/REMTokenTest.sol"),
-    REMCrowdSale = artifacts.require("./test/REMCrowdSaleTest.sol"),
-    REMStrategy = artifacts.require("./REMStrategy.sol"),
+    RETToken = artifacts.require("./test/RETTokenTest.sol"),
+    RETCrowdSale = artifacts.require("./test/RETCrowdSaleTest.sol"),
+    RETStrategy = artifacts.require("./RETStrategy.sol"),
     MintableTokenAllocator = artifacts.require("./allocator/MintableTokenAllocator.sol"),
     DistributedDirectContributionForwarder = artifacts.require("./contribution/DistributedDirectContributionForwarder.sol"),
-    REMAgent = artifacts.require("./REMAgent.sol"),
+    RETAgent = artifacts.require("./RETAgent.sol"),
 
     Utils = require("./utils"),
     BigNumber = require('BigNumber.js'),
@@ -21,12 +21,12 @@ var abi = require('ethereumjs-abi'),
     BN = require('bn.js');
 
 async function deploy() {
-    const token = await REMToken.new(crowdsaleTill);
+    const token = await RETToken.new(crowdsaleTill);
     const allocator = await MintableTokenAllocator.new(token.address);
     const contributionForwarder = await DistributedDirectContributionForwarder.new(100, [etherHolder], [100]);
-    const strategy = await REMStrategy.new([], [crowdsaleSince, crowdsaleTill], [crowdsaleTill, crowdsaleTill + 3600], 75045000);
+    const strategy = await RETStrategy.new([], [crowdsaleSince, crowdsaleTill], [crowdsaleTill, crowdsaleTill + 3600], 75045000);
 
-    const crowdsale = await REMCrowdSale.new(
+    const crowdsale = await RETCrowdSale.new(
         allocator.address,
         contributionForwarder.address,
         strategy.address,
@@ -36,7 +36,7 @@ async function deploy() {
         new BigNumber('50000000000').mul(precision)
     );
 
-    const agent = await REMAgent.new([crowdsale.address], token.address);
+    const agent = await RETAgent.new([crowdsale.address], token.address);
 
 
     return {
@@ -255,12 +255,12 @@ contract('Token', function (accounts) {
             crowdsale,
             agent
         beforeEach(async function () {
-            token = await REMToken.new(crowdsaleTill);
+            token = await RETToken.new(crowdsaleTill);
             allocator = await MintableTokenAllocator.new(token.address);
             contributionForwarder = await DistributedDirectContributionForwarder.new(100, [etherHolder], [100]);
-            strategy = await REMStrategy.new([], [crowdsaleSince, crowdsaleTill], [crowdsaleTill, crowdsaleTill + 3600], 75045000);
+            strategy = await RETStrategy.new([], [crowdsaleSince, crowdsaleTill], [crowdsaleTill, crowdsaleTill + 3600], 75045000);
 
-            crowdsale = await REMCrowdSale.new(
+            crowdsale = await RETCrowdSale.new(
                 allocator.address,
                 contributionForwarder.address,
                 strategy.address,
@@ -270,7 +270,7 @@ contract('Token', function (accounts) {
                 new BigNumber('50000000000').mul(precision)
             );
 
-            agent = await REMAgent.new([crowdsale.address], token.address);
+            agent = await RETAgent.new([crowdsale.address], token.address);
             await crowdsale.setCrowdsaleAgent(agent.address, {from: accounts[0]});
             await crowdsale.addSigner(signAddress);
             await token.updateMintingAgent(allocator.address, true);

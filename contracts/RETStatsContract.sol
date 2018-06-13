@@ -1,24 +1,24 @@
 pragma solidity ^0.4.23;
 
-import './REMCrowdSale.sol';
+import './RETCrowdSale.sol';
 import './token/erc20/MintableToken.sol';
-import './REMStrategy.sol';
+import './RETStrategy.sol';
 import '../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
 
-contract REMStatsContract {
+contract RETStatsContract {
     using SafeMath for uint256;
 
     MintableToken public token;
-    REMCrowdSale public crowdsale;
-    REMStrategy public strategy;
+    RETCrowdSale public crowdsale;
+    RETStrategy public strategy;
 
     constructor(
         MintableToken _token,
-        REMCrowdSale _crowdsale
+        RETCrowdSale _crowdsale
     ) public {
         token = _token;
         crowdsale = _crowdsale;
-        strategy = REMStrategy(crowdsale.pricingStrategy());
+        strategy = RETStrategy(crowdsale.pricingStrategy());
     }
 
     function getTokens(

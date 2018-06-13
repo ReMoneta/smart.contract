@@ -1,9 +1,9 @@
 pragma solidity ^0.4.23;
 
-import '../REMCrowdSale.sol';
+import '../RETCrowdSale.sol';
 
 
-contract REMCrowdSaleTest is REMCrowdSale {
+contract RETCrowdSaleTest is RETCrowdSale {
 
 
     constructor(
@@ -15,7 +15,7 @@ contract REMCrowdSaleTest is REMCrowdSale {
         uint256 _softCap,// (5000000/ 0.01)*100*10^18
         uint256 _hardCap // (5000000/ 0.01)*100*10^18
     ) public
-    REMCrowdSale(
+    RETCrowdSale(
             _allocator,
             _contributionForwarder,
             _pricingStrategy,

@@ -20,7 +20,7 @@ import './AllocationLockupContract.sol';
 */
 
 
-contract REMToken is TimeLockedToken, LockupContract, AllocationLockupContract, OpenZeppelinERC20, BurnableToken, MintableToken {
+contract RETToken is TimeLockedToken, LockupContract, AllocationLockupContract, OpenZeppelinERC20, BurnableToken, MintableToken {
 
     mapping(address => uint256) public intermediateBalances;
     mapping(address => bool) public claimed;

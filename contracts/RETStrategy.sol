@@ -3,7 +3,7 @@ pragma solidity ^0.4.0;
 import './pricing/USDDateTiersPricingStrategy.sol';
 
 
-contract REMStrategy is USDDateTiersPricingStrategy {
+contract RETStrategy is USDDateTiersPricingStrategy {
 
     constructor(uint256[] emptyArray, uint256[2] _preIcoPeriods, uint256[2] _icoPeriods, uint256 _etherPriceInUSD)
     public USDDateTiersPricingStrategy(emptyArray, 18, _etherPriceInUSD) {

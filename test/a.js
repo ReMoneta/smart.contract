@@ -1,11 +1,11 @@
 var
-    REMToken = artifacts.require("./test/REMTokenTest.sol"),
-    REMCrowdSale = artifacts.require("./REMCrowdSale.sol"),
-    REMStrategy = artifacts.require("./REMStrategy.sol"),
+    RETToken = artifacts.require("./test/RETTokenTest.sol"),
+    RETCrowdSale = artifacts.require("./RETCrowdSale.sol"),
+    RETStrategy = artifacts.require("./RETStrategy.sol"),
     MintableTokenAllocator = artifacts.require("./allocator/MintableTokenAllocator.sol"),
     DistributedDirectContributionForwarder = artifacts.require("./contribution/DistributedDirectContributionForwarder.sol"),
-    REMAgent = artifacts.require("./REMAgent.sol"),
-    REMAllocation = artifacts.require("./TokenAllocation.sol"),
+    RETAgent = artifacts.require("./RETAgent.sol"),
+    RETAllocation = artifacts.require("./TokenAllocation.sol"),
     // AllocationLockupContract = artifacts.require("./AllocationLockupContract.sol"),
 
     Utils = require("./utils"),
@@ -24,12 +24,12 @@ var abi = require('ethereumjs-abi'),
 
 async function deploy() {
     // const allocationLock = await AllocationLockupContract.new();
-    const token = await REMToken.new(icoTill);
+    const token = await RETToken.new(icoTill);
     const allocator = await MintableTokenAllocator.new(token.address);
     const contributionForwarder = await DistributedDirectContributionForwarder.new(100, [etherHolder], [100]);
-    const strategy = await REMStrategy.new([], [icoSince, icoSince+1],[icoSince+10, icoSince+50], 75045000);
+    const strategy = await RETStrategy.new([], [icoSince, icoSince+1],[icoSince+10, icoSince+50], 75045000);
 
-    const crowdsale = await REMCrowdSale.new(
+    const crowdsale = await RETCrowdSale.new(
         allocator.address,
         contributionForwarder.address,
         strategy.address,
@@ -39,12 +39,12 @@ async function deploy() {
         new BigNumber('50000000000').mul(precision)
     );
 
-    const agent = await REMAgent.new(crowdsale.address, token.address);
+    const agent = await RETAgent.new(crowdsale.address, token.address);
     await crowdsale.setCrowdsaleAgent(agent.address);
     await allocator.addCrowdsales(crowdsale.address);
     await crowdsale.addSigner(signAddress);
     await token.updateMintingAgent(allocator.address, true);
-    const allocation = await REMAllocation.new(crowdsale.address,allocator.address);
+    const allocation = await RETAllocation.new(crowdsale.address,allocator.address);
     await token.updateMintingAgent(allocation.address, true);
 
     return {
