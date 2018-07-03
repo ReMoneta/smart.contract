@@ -11,8 +11,6 @@ import '../../Ownable.sol';
 /// @notice allow to mint tokens
 /// @dev Base class
 contract MintableToken is StandardToken, Ownable {
-
-
     using SafeMath for uint256;
 
     uint256 public maxSupply;

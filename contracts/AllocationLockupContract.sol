@@ -87,7 +87,6 @@ contract AllocationLockupContract is LockupContract {
             _holderBalance;
         }
 
-
         uint256 blockedAmount;
 
         for (uint256 i = 0; i < lockedAmount[_address].length / 4; i++) {
