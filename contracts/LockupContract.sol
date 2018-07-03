@@ -1,20 +1,9 @@
 pragma solidity ^0.4.23;
 
-import './../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
+import './../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol';
 import './Ownable.sol';
 
-// testcases
-/*
--log functions updates values in lockedAmount
-- only agnet can call it
-- only owner can add new agents
-- zero/ not zero initial unlock
-- zero/ not zero releasePeriod
-- isTransferAllowedInternal
-        - inital unlock is working properly
-        - all tokens are unlocked after lock period
-        - tokens are unlocked partialy according to releasePeriod
-*/
+
 contract LockupContract is Ownable {
 
     using SafeMath for uint256;

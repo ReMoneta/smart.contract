@@ -1,7 +1,7 @@
 pragma solidity ^0.4.23;
 
-import '../../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
-import '../../../node_modules/zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
+import '../../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol';
+import '../../../node_modules/openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
 import '../../TimeLocked.sol';
 
 /// @title TimeLockedToken
@@ -13,7 +13,7 @@ contract TimeLockedToken is TimeLocked, StandardToken {
     constructor(uint256 _time) public TimeLocked(_time) {}
 
     function transfer(address _to, uint256 _tokens) public isTimeLocked(msg.sender, false) returns (bool) {
-       return super.transfer(_to, _tokens);
+        return super.transfer(_to, _tokens);
     }
 
     function transferFrom(address _holder, address _to, uint256 _tokens)

@@ -1,24 +1,11 @@
 pragma solidity ^0.4.23;
 
-import '../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
+import '../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol';
 import './allocator/MintableTokenAllocator.sol';
 import './crowdsale/CrowdsaleImpl.sol';
 import './Ownable.sol';
 
-// testcases
-/*
-- create & check  params
-- setCrowdsale and setAllocator are changing state variables & only Owner can call it
-- multivestMint
-    - only  crowdsale signers  can run it
-    - if  sentOnce is  true referral can claim tokens only once
-    - if  sentOnce is  false referral can claim tokens many times
-    - if  sentOnce is  false referral can claim tokens many times
-    - tokens amount should be > 0
-    -  tokens amount should be <= totalSupply
-    -  should fail  if  allocator is not set up (set referral in allocator)
-    -  updates claimedBalances
-*/
+
 contract Referral is Ownable {
 
     using SafeMath for uint256;

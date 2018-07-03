@@ -6,12 +6,9 @@ import './RETToken.sol';
 
 contract RETAgent is MintableCrowdsaleOnSuccessAgent {
 
-
     RETToken public token;
 
-    constructor(Crowdsale _crowdsale, RETToken _token)
-    public MintableCrowdsaleOnSuccessAgent(_crowdsale, _token)
-    {
+    constructor(Crowdsale _crowdsale, RETToken _token) public MintableCrowdsaleOnSuccessAgent(_crowdsale, _token) {
         token = _token;
 
         if (address(0) != address(_token)) {

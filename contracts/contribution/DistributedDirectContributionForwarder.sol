@@ -2,6 +2,7 @@ pragma solidity ^0.4.23;
 
 import './ContributionForwarder.sol';
 
+
 /// @title DistributedDirectContributionForwarder
 /// @author Applicature
 /// @notice Contract is responsible for distributing collected ethers, that are received from CrowdSale.
@@ -17,12 +18,9 @@ contract DistributedDirectContributionForwarder is ContributionForwarder {
         uint256 forwardedWei;
     }
 
-    // @TODO: should we use uint256 [] for receivers & proportions?
     constructor(
         uint256 _proportionAbsMax, address[] _receivers, uint256[] _proportions
-    )
-    public
-    {
+    ) public {
         proportionAbsMax = _proportionAbsMax;
 
         require(_receivers.length == _proportions.length);

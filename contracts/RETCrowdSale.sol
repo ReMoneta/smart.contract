@@ -34,8 +34,7 @@ contract RETCrowdSale is RefundableCrowdsale {
         false,
         _softCap,
         _hardCap
-    )
-    {
+    ) {
         pricingStrategy = USDDateTiersPricingStrategy(_pricingStrategy);
     }
 

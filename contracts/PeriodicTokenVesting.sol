@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
-
-import 'zeppelin-solidity/contracts/token/ERC20/TokenVesting.sol';
+import 'openzeppelin-solidity/contracts/token/ERC20/TokenVesting.sol';
 
 
 contract PeriodicTokenVesting is TokenVesting {
@@ -17,9 +16,7 @@ contract PeriodicTokenVesting is TokenVesting {
         uint256 _periods,
         bool _revocable,
         address _unreleasedHolder
-    )
-    public TokenVesting(_beneficiary, _start, _cliff, _duration, _revocable)
-    {
+    ) public TokenVesting(_beneficiary, _start, _cliff, _duration, _revocable) {
         require(_unreleasedHolder != address(0));
         periods = _periods;
         unreleasedHolder = _unreleasedHolder;

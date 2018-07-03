@@ -1,16 +1,8 @@
 pragma solidity ^0.4.23;
 
 import '../Ownable.sol';
-import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
+import './../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol';
 
-/*
-    Tests:
-    - check that setEtherInUSD can be called only by trustedAddress
-    - check that setEtherInUSD changes (etherPriceInUSD and priceUpdateAt)
-    - check that setEtherInUSD accept sting  with 5 sumbols after .
-    - check that METHODS could be called only by owner
-        - setTrustedAddress
-*/
 
 contract USDExchange is Ownable {
 
@@ -65,8 +57,11 @@ contract USDExchange is Ownable {
         for (uint i = 0; i < bresult.length; i++) {
             if ((bresult[i] >= 48) && (bresult[i] <= 57)) {
                 if (decimals) {
-                    if (_b == 0) break;
-                    else _b--;
+                    if (_b == 0) {
+                        break;
+                    } else {
+                        _b--;
+                    }
                 }
                 res *= 10;
                 res += uint(bresult[i]) - 48;

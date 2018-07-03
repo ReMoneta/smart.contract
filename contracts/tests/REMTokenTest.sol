@@ -2,6 +2,7 @@ pragma solidity ^0.4.23;
 
 import '../RETToken.sol';
 
+
 contract RETTokenTest is RETToken {
 
     constructor(uint256 _unlockTokensTime) public

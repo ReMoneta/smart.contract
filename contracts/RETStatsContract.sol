@@ -3,7 +3,8 @@ pragma solidity ^0.4.23;
 import './RETCrowdSale.sol';
 import './token/erc20/MintableToken.sol';
 import './RETStrategy.sol';
-import '../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
+import '../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol';
+
 
 contract RETStatsContract {
     using SafeMath for uint256;

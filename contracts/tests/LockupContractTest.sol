@@ -7,7 +7,7 @@ contract LockupContractTest is LockupContract {
 
 
     constructor(uint256 _lockPeriod, uint256 _initialUnlock, uint256 _releasePeriod) public
-    LockupContract(_lockPeriod, _initialUnlock, _releasePeriod){
+    LockupContract(_lockPeriod, _initialUnlock, _releasePeriod) {
     }
 
     function isTransferAllowedTest(
@@ -49,11 +49,11 @@ contract LockupContractTest is LockupContract {
                         uint256 duration = _time.sub(lockTime).div(releasePeriod);
                         tokensUnlocked = lockedBalance.mul(duration).mul(releasePeriod).div(lockPeriod);
                     }
-                     blockedAmount = blockedAmount.add(lockedBalance).sub(tokensUnlocked);
+                    blockedAmount = blockedAmount.add(lockedBalance).sub(tokensUnlocked);
                 }
             }
         }
 
-       return _holderBalance.sub(blockedAmount);
+        return _holderBalance.sub(blockedAmount);
     }
 }

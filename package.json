@@ -53,6 +53,6 @@
     "solidity-coverage": "^0.5.0",
     "solium": "^1.1.7",
     "truffle-hdwallet-provider": "0.0.3",
-    "zeppelin-solidity": "^1.9.0"
+    "openzeppelin-solidity": "^1.10.0"
   }
 }

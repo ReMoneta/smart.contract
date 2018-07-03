@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
-
-import '../../../node_modules/zeppelin-solidity/contracts/token/ERC20/BasicToken.sol';
+import '../../../node_modules/openzeppelin-solidity/contracts/token/ERC20/BasicToken.sol';
 import '../../Ownable.sol';
 
 

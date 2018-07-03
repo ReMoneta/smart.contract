@@ -6,6 +6,7 @@ pragma solidity ^0.4.23;
 /// @notice helper mixed to other contracts to lock contract on a block
 /// @dev Base class
 contract BlockLocked {
+
     uint256 public blockNumber;
 
     modifier isBlockLocked(bool _blockLocked) {

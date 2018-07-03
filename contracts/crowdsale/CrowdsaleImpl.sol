@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
-
-import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
+import './../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol';
 import '../allocator/TokenAllocator.sol';
 import '../contribution/ContributionForwarder.sol';
 import '../pricing/PricingStrategy.sol';
@@ -44,9 +43,7 @@ contract CrowdsaleImpl is Crowdsale, Ownable {
         bool _allowWhitelisted,
         bool _allowSigned,
         bool _allowAnonymous
-    )
-    public
-    {
+    ) public {
         allocator = _allocator;
         contributionForwarder = _contributionForwarder;
         pricingStrategy = _pricingStrategy;

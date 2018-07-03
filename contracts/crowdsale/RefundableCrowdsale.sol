@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
-
-import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
+import './../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol';
 import '../agent/CrowdsaleAgent.sol';
 import '../allocator/TokenAllocator.sol';
 import '../contribution/ContributionForwarder.sol';
@@ -34,15 +33,11 @@ contract RefundableCrowdsale is HardCappedCrowdsale {
         bool _allowAnonymous,
         uint256 _softCap,
         uint256 _hardCap
-
-    )
-    public
-    HardCappedCrowdsale(
+    ) public HardCappedCrowdsale(
         _allocator, _contributionForwarder, _pricingStrategy,
         _startDate, _endDate,
         _allowWhitelisted, _allowSigned, _allowAnonymous, _hardCap
-    )
-    {
+    ) {
         softCap = _softCap;
     }
 

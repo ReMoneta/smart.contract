@@ -1,23 +1,11 @@
 pragma solidity ^0.4.23;
 
-
 import './token/erc20/TimeLockedToken.sol';
 import './token/erc20/openzeppelin/OpenZeppelinERC20.sol';
 import './token/erc20/MintableToken.sol';
 import './token/erc20/BurnableToken.sol';
 import './LockupContract.sol';
 import './AllocationLockupContract.sol';
-
-
-/*
-    Tests:
-    - deploy contract & check if the params  are equal
-    - check setUnlockTime function:
-        - updates time
-        - only owner can call it
-   - check  transfer
-
-*/
 
 
 contract RETToken is TimeLockedToken, LockupContract, AllocationLockupContract, OpenZeppelinERC20, BurnableToken, MintableToken {
@@ -63,18 +51,18 @@ contract RETToken is TimeLockedToken, LockupContract, AllocationLockupContract, 
     function transfer(address _to, uint256 _value) public returns (bool) {
         require(balanceOf(msg.sender) >= _value);
         require(true == isTransferAllowed(msg.sender, _value));
-        require(true == super.transfer(_to, _value));
         intermediateBalances[msg.sender] = intermediateBalances[msg.sender].sub(_value);
         intermediateBalances[_to] = intermediateBalances[_to].add(_value);
+        require(true == super.transfer(_to, _value));
         return true;
     }
 
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool) {
-        require(balanceOf(_from)>=_value);
+        require(balanceOf(_from) >= _value);
         require(true == isTransferAllowed(_from, _value));
-        require (true == super.transferFrom(_from, _to, _value));
         intermediateBalances[_from] = intermediateBalances[_from].sub(_value);
         intermediateBalances[_to] = intermediateBalances[_to].add(_value);
+        require(true == super.transferFrom(_from, _to, _value));
         return true;
     }
 

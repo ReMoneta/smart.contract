@@ -14,8 +14,7 @@ contract RETCrowdSaleTest is RETCrowdSale {
         uint256 _endTime,
         uint256 _softCap,// (5000000/ 0.01)*100*10^18
         uint256 _hardCap // (5000000/ 0.01)*100*10^18
-    ) public
-    RETCrowdSale(
+    ) public RETCrowdSale(
             _allocator,
             _contributionForwarder,
             _pricingStrategy,
@@ -23,8 +22,7 @@ contract RETCrowdSaleTest is RETCrowdSale {
             _endTime,
             _softCap,
             _hardCap
-        )
-    {
+        ) {
     }
 
     function updateSoldTokens(uint256 _tokensSold) public {

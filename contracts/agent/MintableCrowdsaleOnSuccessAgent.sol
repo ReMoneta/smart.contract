@@ -1,6 +1,5 @@
 pragma solidity ^0.4.23;
 
-
 import './CrowdsaleAgent.sol';
 import '../crowdsale/Crowdsale.sol';
 import '../token/erc20/MintableToken.sol';
@@ -19,8 +18,7 @@ contract MintableCrowdsaleOnSuccessAgent is CrowdsaleAgent {
     bool public _isInitialized;
 
     constructor(Crowdsale _crowdsale, MintableToken _token)
-    public CrowdsaleAgent(_crowdsale)
-    {
+    public CrowdsaleAgent(_crowdsale) {
         crowdsale = _crowdsale;
         token = _token;
 

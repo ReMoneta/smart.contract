@@ -1,6 +1,5 @@
 pragma solidity ^0.4.23;
 
-
 import './Agent.sol';
 import '../crowdsale/Crowdsale.sol';
 

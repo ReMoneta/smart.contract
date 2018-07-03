@@ -6,20 +6,6 @@ import './RETStrategy.sol';
 import './RETToken.sol';
 import './Referral.sol';
 
-/*
-    Tests:
-    - check that initVesting could be called only once
-    - check that after creation all balances (owners, funds, team) are null
-    - check that after creation & initVesting all balances (owners, funds, team) are null
-    - check that after creation & initVesting, allocate - all balances are filled (owners, funds, team)
-    - check that after creation & initVesting, allocate - subsequent calls of `allocate` should fail
-    - check that created vesting has correctly inited variables (equal what was send to createVesting)
-    - check that METHODS could be called only by owner
-        - initVesting
-        - createVesting
-        - revokeVesting
-*/
-
 
 contract TokenAllocation is Ownable, Referral {
 

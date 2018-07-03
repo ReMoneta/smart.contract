@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
-
-import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
+import './../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol';
 import './TokenAllocator.sol';
 import '../token/erc20/MintableToken.sol';
 

@@ -1,8 +1,9 @@
 pragma solidity ^0.4.23;
 
-import '../../../../node_modules/zeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
-import '../../../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
+import '../../../../node_modules/openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
+import '../../../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol';
 import '../../../Ownable.sol';
+
 
 /// @title OpenZeppelinERC20
 /// @author Applicature

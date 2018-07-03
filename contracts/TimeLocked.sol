@@ -1,5 +1,6 @@
 pragma solidity ^0.4.23;
 
+
 /// @title TimeLocked
 /// @author Applicature
 /// @notice helper mixed to other contracts to lock contract on a timestamp

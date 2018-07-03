@@ -1,32 +1,8 @@
 pragma solidity ^0.4.23;
 
-
-import './../../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol';
+import './../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol';
 import './PricingStrategy.sol';
 import './USDExchange.sol';
-
-/*
-    Tests:
-    - check getTierIndex returns  properly index
-    - check getActualDates
-    - check getTokens
-        - zero weis  should return zero tokens
-        - less than  min purchase
-        - outdated
-        - before sale period
-        - tokens less than available
-        - success for each  tier
-    - check getWeis
-        - zero tokens should return zero weis
-        - less than  min purchase
-        - outdated
-        - before sale period
-        - tokens less than available
-        - success for each  tier
-    - updateDates - changes the start and end dates
-    - check that METHODS could be called only by owner
-        - updateDates
-*/
 
 
 /// @title USDDateTiersPricingStrategy
@@ -49,8 +25,7 @@ contract USDDateTiersPricingStrategy is PricingStrategy, USDExchange {
     Tier[] public tiers;
     uint256 public decimals;
 
-    constructor(uint256[] _tiers, uint256 _decimals, uint256 _etherPriceInUSD) public
-    USDExchange(_etherPriceInUSD) {
+    constructor(uint256[] _tiers, uint256 _decimals, uint256 _etherPriceInUSD) public USDExchange(_etherPriceInUSD) {
         decimals = _decimals;
         trustedAddresses[msg.sender] = true;
         require(_tiers.length % 6 == 0);
