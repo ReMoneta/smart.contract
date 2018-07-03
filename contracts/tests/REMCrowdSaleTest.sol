@@ -5,7 +5,6 @@ import '../RETCrowdSale.sol';
 
 contract RETCrowdSaleTest is RETCrowdSale {
 
-
     constructor(
         MintableTokenAllocator _allocator,
         DistributedDirectContributionForwarder _contributionForwarder,

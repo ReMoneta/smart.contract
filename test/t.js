@@ -9,7 +9,7 @@ var
     RETStatsContract = artifacts.require("./RETStatsContract.sol"),
 
     Utils = require("./utils"),
-    BigNumber = require('BigNumber.js'),
+    BigNumber = require('bignumber.js'),
 
     precision = new BigNumber("1000000000000000000"),
     usdPrecision = new BigNumber("100000"),
@@ -97,14 +97,14 @@ contract('Token', function (accounts) {
 
         let a = await stats.getStats.call(new BigNumber('1').mul(precision).valueOf());
         console.log(await a[7]);
-        let currentState = await crowdsale.getState()//Initializing
+        let currentState = await crowdsale.getState.call()//Initializing
         assert.equal(currentState, 1, "state doesn't match");
 
         await token.updateMintingAgent(allocator.address, true);
         await crowdsale.setCrowdsaleAgent(agent.address);
         await allocator.addCrowdsales(crowdsale.address);
         await token.updateLockupAgent(agent.address,true);
-        currentState = await crowdsale.getState()//InCrowdsale
+        currentState = await crowdsale.getState.call()//InCrowdsale
         assert.equal(new BigNumber(currentState).valueOf(), 3, "state doesn't match");
 
         await makeTransactionKYC(crowdsale, bountyAddress, accounts[2], new BigNumber('2').mul(precision))
@@ -133,13 +133,13 @@ contract('Token', function (accounts) {
         await strategy.updateDates(0, icoSince - 3600 * 2, icoSince - 3600);
         await crowdsale.updateState();
 
-        currentState = await crowdsale.getState()//BeforeCrowdsale
+        currentState = await crowdsale.getState.call()//BeforeCrowdsale
         assert.equal(currentState, 2, "state doesn't match");
 
         await strategy.updateDates(1, icoSince, icoTill);
         await crowdsale.updateState();
 
-        currentState = await crowdsale.getState()//InCrowdsale
+        currentState = await crowdsale.getState.call()//InCrowdsale
         assert.equal(currentState, 3, "state doesn't match");
     });
     it("check  transfer", async function () {
@@ -153,7 +153,7 @@ contract('Token', function (accounts) {
             allocation
         } = await deploy();
 
-        let currentState = await crowdsale.getState()//Initializing
+        let currentState = await crowdsale.getState.call()//Initializing
         assert.equal(currentState, 1, "state doesn't match");
 
         await token.updateMintingAgent(allocator.address, true);
@@ -176,21 +176,28 @@ contract('Token', function (accounts) {
         await token.transfer(accounts[2], 100, {from:accounts[4]})
             .then(Utils.receiptShouldFailed)
             .catch(Utils.catchReceiptShouldFailed);
+        await Utils.balanceShouldEqualTo(token, accounts[3], 0)
+        await token.setUnlockTime(icoSince)
+        await Utils.balanceShouldEqualTo(token, accounts[3], 0)
+        await token.setClaimState(accounts[3], true);
+        await token.transfer(accounts[2], 100, {from:accounts[3]})
+            .then(Utils.receiptShouldSucceed)
+        await token.setUnlockTime(icoTill)
         await token.updateExcludedAddress(accounts[4], true)
             .then(Utils.receiptShouldSucceed)
         assert.equal((await token.excludedAddresses.call(accounts[4])).valueOf(), true,'excludedAddresses is not equal')
-        assert.equal(await token.isTransferAllowed.call(accounts[4],100), true,'isTransferAllowed is not equal')
+        assert.equal(await token.isTransferAllowed.call(accounts[4],200), true,'isTransferAllowed is not equal')
 
         await token.transfer(accounts[2], 100, {from:accounts[4]})
             .then(Utils.receiptShouldSucceed)
         await Utils.balanceShouldEqualTo(token, accounts[2], 0)
-        assert.equal(new BigNumber(await token.intermediateBalances.call(accounts[2])).valueOf(), 100, 'intermediateBalances is not equal')
+        assert.equal(new BigNumber(await token.intermediateBalances.call(accounts[2])).valueOf(), 200, 'intermediateBalances is not equal')
         await token.transfer(accounts[2], 100, {from:accounts[3]})
             .then(Utils.receiptShouldFailed)
             .catch(Utils.catchReceiptShouldFailed)
         await token.setUnlockTokensTimeTest(icoSince - 3600)
-        await Utils.balanceShouldEqualTo(token, accounts[3], 0)
-        assert.equal(new BigNumber(await token.intermediateBalances.call(accounts[3])).valueOf(), 10000, 'intermediateBalances is not equal')
+        await Utils.balanceShouldEqualTo(token, accounts[3], 9900)
+        assert.equal(new BigNumber(await token.intermediateBalances.call(accounts[3])).valueOf(), 9900, 'intermediateBalances is not equal')
         await token.updateMintingAgent(allocation.address, true);
         await token.updateMintingAgent(allocator.address, true);
         await allocator.addCrowdsales(allocation.address);
@@ -201,6 +208,6 @@ contract('Token', function (accounts) {
         await token.transfer(accounts[2], 100, {from:accounts[3]})
             .then(Utils.receiptShouldSucceed)
         await Utils.balanceShouldEqualTo(token, accounts[2], 0)
-        assert.equal(new BigNumber(await token.intermediateBalances.call(accounts[2])).valueOf(), 200, 'intermediateBalances is not equal')
+        assert.equal(new BigNumber(await token.intermediateBalances.call(accounts[2])).valueOf(), 300, 'intermediateBalances is not equal')
     });
 });

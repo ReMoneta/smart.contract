@@ -9,7 +9,7 @@ var
     // AllocationLockupContract = artifacts.require("./AllocationLockupContract.sol"),
 
     Utils = require("./utils"),
-    BigNumber = require('BigNumber.js'),
+    BigNumber = require('bignumber.js'),
 
     precision = new BigNumber("1000000000000000000"),
     usdPrecision = new BigNumber("100000"),

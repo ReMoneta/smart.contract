@@ -1,7 +1,7 @@
 var
     USDExchange = artifacts.require("./pricing/USDExchange.sol"),
     Utils = require("./utils"),
-    BigNumber = require('BigNumber.js');
+    BigNumber = require('bignumber.js');
 
 contract('USDExchange', function (accounts) {
     it('create contract, set token price', async function () {

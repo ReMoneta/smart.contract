@@ -16,7 +16,7 @@
   },
   "author": "Andrew Zubko <andrew@applicature.com>",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=8.11.3"
   },
   "scripts": {
     "ganache": "ganache-cli > /dev/null 2>&1 &",

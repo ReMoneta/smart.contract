@@ -32,13 +32,6 @@ contract RETToken is TimeLockedToken, LockupContract, AllocationLockupContract, 
         time = _unlockTokensTime;
     }
 
-    function balanceOf(address _owner) public  view returns (uint256 balance) {
-        if (excludedAddresses[_owner] == true || (time <= block.timestamp && claimed[_owner] == true)) {
-            return super.balanceOf(_owner);
-        }
-        return 0;
-    }
-
     function updateMaxSupply(uint256 _newMaxSupply) public onlyOwner {
         require(_newMaxSupply > 0);
         maxSupply = _newMaxSupply;
@@ -84,4 +77,12 @@ contract RETToken is TimeLockedToken, LockupContract, AllocationLockupContract, 
         super.mint(_holder, _tokens);
         intermediateBalances[_holder] = intermediateBalances[_holder].add(_tokens);
     }
+
+    function balanceOf(address _owner) public view returns (uint256 balance) {
+        if (excludedAddresses[_owner] == true || (time <= block.timestamp && claimed[_owner] == true)) {
+            return super.balanceOf(_owner);
+        }
+        return 0;
+    }
+
 }

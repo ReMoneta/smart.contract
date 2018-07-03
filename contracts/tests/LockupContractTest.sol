@@ -5,7 +5,6 @@ import '../LockupContract.sol';
 
 contract LockupContractTest is LockupContract {
 
-
     constructor(uint256 _lockPeriod, uint256 _initialUnlock, uint256 _releasePeriod) public
     LockupContract(_lockPeriod, _initialUnlock, _releasePeriod) {
     }
