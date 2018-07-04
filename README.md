@@ -1,26 +1,32 @@
-# Project Template
 
-## Content:
-ICO Smart Contract templates
 
-## Features/Rules:
-1. Contract expects certain version of compiler
-2. Use truffle as local dependency.
-Use certain version of truffle which match to expected version of compiler.
-4. Use npm commands:
+# Remoneta solidity contract
+
+## Introduction
+
+The smart contract is created  by  Applicature.
+The contract is written using pragma solidity 0.4.24;  Remoneta integrates with [Truffle](https://github.com/ConsenSys/truffle) and [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-solidity)
+
+## Installation
+
+To set up Remoneta SC  on  computer   you have to   [Install Node.js](https://nodejs.org/en/download/)
+Then install Trufflle  framework
+```sh
+npm install -g truffle
+```
+From the repository folder install all  needed packages
+```sh
+npm install
+```
+To test the contract
+```sh
+truffle develop
+test
+```
+Use npm commands:
  - `compile`,
  - `test`,
  - `migrate`,
  - `coverage`,
  - `solhint`,
  - `solium`.
-5. `Zeppelin-solidity` is dependency for contracts, use it as base contract.
-6. Use jenkins to verify pull requests
-7. ...
-
-## Additional tools:
-These tools can be installed optionally(but suggested), follow their documentation:
-1. [Oyente](https://github.com/melonproject/oyente)
-2. [Solidity-flattener](https://github.com/BlockCatIO/solidity-flattener)
-3. ...
-

@@ -63,190 +63,190 @@ function makeTransactionKYC(instance, sign, address, value) {
 }
 
 contract('Token', function (accounts) {
-    /*
-    it('deploy contract & set allocator and pricing strategy, check if the params  are equal', async function () {
-        const {
-            token,
-            allocator,
-            contributionForwarder,
-            strategy,
-            crowdsale,
-            agent
-        } = await deploy();
 
-        await Utils.checkState({crowdsale}, {
-            crowdsale: {
-                softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                contributorsWei: [
-                    {[accounts[0]]: 0},
-                    {[accounts[1]]: 0},
-                ],
+     it('deploy contract & set allocator and pricing strategy, check if the params  are equal', async function () {
+     const {
+     token,
+     allocator,
+     contributionForwarder,
+     strategy,
+     crowdsale,
+     agent
+     } = await deploy();
 
-                hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                currentState: 0,
-                allocator: allocator.address,
-                contributionForwarder: contributionForwarder.address,
-                pricingStrategy: strategy.address,
-                crowdsaleAgent: 0x0,
-                finalized: false,
-                startDate: crowdsaleSince,
-                endDate: crowdsaleTill,
-                allowWhitelisted: true,
-                allowSigned: true,
-                allowAnonymous: false,
-                tokensSold: new BigNumber('0').mul(precision).valueOf(),
-                whitelisted: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                signers: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                externalContributionAgents: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                owner: accounts[0],
-                newOwner: 0x0,
-            }
-        });
+     await Utils.checkState({crowdsale}, {
+     crowdsale: {
+     softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     contributorsWei: [
+     {[accounts[0]]: 0},
+     {[accounts[1]]: 0},
+     ],
 
-        await crowdsale.setCrowdsaleAgent(agent.address, {from: accounts[1]})
-            .then(Utils.receiptShouldFailed)
-            .catch(Utils.catchReceiptShouldFailed);
-        await crowdsale.setCrowdsaleAgent(agent.address, {from: accounts[0]});
-         await token.updateLockupAgent(agent.address, true);
+     hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     currentState: 0,
+     allocator: allocator.address,
+     contributionForwarder: contributionForwarder.address,
+     pricingStrategy: strategy.address,
+     crowdsaleAgent: 0x0,
+     finalized: false,
+     startDate: crowdsaleSince,
+     endDate: crowdsaleTill,
+     allowWhitelisted: true,
+     allowSigned: true,
+     allowAnonymous: false,
+     tokensSold: new BigNumber('0').mul(precision).valueOf(),
+     whitelisted: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     signers: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     externalContributionAgents: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     owner: accounts[0],
+     newOwner: 0x0,
+     }
+     });
 
-        await Utils.checkState({crowdsale}, {
-            crowdsale: {
-                softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                contributorsWei: [
-                    {[accounts[0]]: 0},
-                    {[accounts[1]]: 0},
-                ],
-                hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                currentState: 0,
-                allocator: allocator.address,
-                contributionForwarder: contributionForwarder.address,
-                pricingStrategy: strategy.address,
-                crowdsaleAgent: agent.address,
-                finalized: false,
-                startDate: crowdsaleSince,
-                endDate: crowdsaleTill,
-                allowWhitelisted: true,
-                allowSigned: true,
-                allowAnonymous: false,
-                tokensSold: new BigNumber('0').mul(precision).valueOf(),
-                whitelisted: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                signers: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                externalContributionAgents: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                owner: accounts[0],
-                newOwner: 0x0,
-            }
-        });
-    })
-    it('check  if updateState updates start and end dates', async function () {
-        const {
-            token,
-            allocator,
-            contributionForwarder,
-            strategy,
-            crowdsale,
-            agent
-        } = await deploy();
-        await crowdsale.updateState()
-            .then(Utils.receiptShouldSucceed)
-        await Utils.checkState({crowdsale}, {
-            crowdsale: {
-                softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                contributorsWei: [
-                    {[accounts[0]]: 0},
-                    {[accounts[1]]: 0},
-                ],
+     await crowdsale.setCrowdsaleAgent(agent.address, {from: accounts[1]})
+     .then(Utils.receiptShouldFailed)
+     .catch(Utils.catchReceiptShouldFailed);
+     await crowdsale.setCrowdsaleAgent(agent.address, {from: accounts[0]});
+     await token.updateLockupAgent(agent.address, true);
 
-                hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                currentState: 1,
-                allocator: allocator.address,
-                contributionForwarder: contributionForwarder.address,
-                pricingStrategy: strategy.address,
-                crowdsaleAgent: 0x0,
-                finalized: false,
-                startDate: crowdsaleSince,
-                endDate: crowdsaleTill,
-                allowWhitelisted: true,
-                allowSigned: true,
-                allowAnonymous: false,
-                tokensSold: new BigNumber('0').mul(precision).valueOf(),
-                whitelisted: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                signers: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                externalContributionAgents: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                owner: accounts[0],
-                newOwner: 0x0,
-            }
-        });
-        await strategy.updateDates(0, crowdsaleSince-5, crowdsaleSince)
-        await crowdsale.updateState()
-            .then(Utils.receiptShouldSucceed)
+     await Utils.checkState({crowdsale}, {
+     crowdsale: {
+     softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     contributorsWei: [
+     {[accounts[0]]: 0},
+     {[accounts[1]]: 0},
+     ],
+     hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     currentState: 0,
+     allocator: allocator.address,
+     contributionForwarder: contributionForwarder.address,
+     pricingStrategy: strategy.address,
+     crowdsaleAgent: agent.address,
+     finalized: false,
+     startDate: crowdsaleSince,
+     endDate: crowdsaleTill,
+     allowWhitelisted: true,
+     allowSigned: true,
+     allowAnonymous: false,
+     tokensSold: new BigNumber('0').mul(precision).valueOf(),
+     whitelisted: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     signers: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     externalContributionAgents: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     owner: accounts[0],
+     newOwner: 0x0,
+     }
+     });
+     })
+     it('check  if updateState updates start and end dates', async function () {
+     const {
+     token,
+     allocator,
+     contributionForwarder,
+     strategy,
+     crowdsale,
+     agent
+     } = await deploy();
+     await crowdsale.updateState()
+     .then(Utils.receiptShouldSucceed)
+     await Utils.checkState({crowdsale}, {
+     crowdsale: {
+     softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     contributorsWei: [
+     {[accounts[0]]: 0},
+     {[accounts[1]]: 0},
+     ],
 
-        await Utils.checkState({crowdsale}, {
-            crowdsale: {
-                softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                contributorsWei: [
-                    {[accounts[0]]: 0},
-                    {[accounts[1]]: 0},
-                ],
+     hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     currentState: 1,
+     allocator: allocator.address,
+     contributionForwarder: contributionForwarder.address,
+     pricingStrategy: strategy.address,
+     crowdsaleAgent: 0x0,
+     finalized: false,
+     startDate: crowdsaleSince,
+     endDate: crowdsaleTill,
+     allowWhitelisted: true,
+     allowSigned: true,
+     allowAnonymous: false,
+     tokensSold: new BigNumber('0').mul(precision).valueOf(),
+     whitelisted: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     signers: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     externalContributionAgents: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     owner: accounts[0],
+     newOwner: 0x0,
+     }
+     });
+     await strategy.updateDates(0, crowdsaleSince-5, crowdsaleSince)
+     await crowdsale.updateState()
+     .then(Utils.receiptShouldSucceed)
 
-                hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                currentState: 1,
-                allocator: allocator.address,
-                contributionForwarder: contributionForwarder.address,
-                pricingStrategy: strategy.address,
-                crowdsaleAgent: 0x0,
-                finalized: false,
-                // crowdsaleTill, crowdsaleTill + 3600
-                startDate: crowdsaleTill,
-                endDate: crowdsaleTill + 3600,
-                allowWhitelisted: true,
-                allowSigned: true,
-                allowAnonymous: false,
-                tokensSold: new BigNumber('0').mul(precision).valueOf(),
-                whitelisted: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                signers: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                externalContributionAgents: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                owner: accounts[0],
-                newOwner: 0x0,
-            }
-        });
-    })
-    */
+     await Utils.checkState({crowdsale}, {
+     crowdsale: {
+     softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     contributorsWei: [
+     {[accounts[0]]: 0},
+     {[accounts[1]]: 0},
+     ],
+
+     hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     currentState: 1,
+     allocator: allocator.address,
+     contributionForwarder: contributionForwarder.address,
+     pricingStrategy: strategy.address,
+     crowdsaleAgent: 0x0,
+     finalized: false,
+     // crowdsaleTill, crowdsaleTill + 3600
+     startDate: crowdsaleTill,
+     endDate: crowdsaleTill + 3600,
+     allowWhitelisted: true,
+     allowSigned: true,
+     allowAnonymous: false,
+     tokensSold: new BigNumber('0').mul(precision).valueOf(),
+     whitelisted: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     signers: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     externalContributionAgents: [
+     {[accounts[0]]: false},
+     {[accounts[1]]: false},
+     ],
+     owner: accounts[0],
+     newOwner: 0x0,
+     }
+     });
+     })
+
     describe('check contribution', async function () {
         let token,
             allocator,
@@ -495,8 +495,8 @@ contract('Token', function (accounts) {
             crowdsale,
             agent
         } = await deploy();
-       await crowdsale.updateHardCap( new BigNumber('30000000000').mul(precision))
-           .then(Utils.receiptShouldSucceed)
+        await crowdsale.updateHardCap( new BigNumber('30000000000').mul(precision))
+            .then(Utils.receiptShouldSucceed)
         await crowdsale.updateHardCap(new BigNumber('40000000000').mul(precision), {from: accounts[6]})
             .then(Utils.receiptShouldFailed)
             .catch(Utils.catchReceiptShouldFailed)
