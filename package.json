@@ -26,6 +26,7 @@
     "coverage": "./node_modules/.bin/solidity-coverage",
     "migrate-develop": "truffle migrate",
     "migrate": "truffle migrate --network rinkeby",
+    "migrate-live": "truffle migrate --network live",
     "solhint": "solhint 'contracts/**/*.sol'",
     "solium": "solium -d contracts/",
     "test:ci": "npm run solhint && npm run coverage && npm run ganache && npm run test && npm run solium"
@@ -35,6 +36,10 @@
   },
   "dependencies": {
     "minimetoken": "^0.2.0",
+    "@digix/truffle-lightwallet-provider": "^0.1.4",
+    "ethereumjs-wallet": "^0.6.0",
+    "truffle-hdwallet-provider": "0.0.5",
+    "truffle-wallet-provider": "0.0.5",
     "truffle": "^4.1.8"
   },
   "devDependencies": {
@@ -52,7 +57,6 @@
     "solhint": "^1.1.10",
     "solidity-coverage": "^0.5.0",
     "solium": "^1.1.7",
-    "truffle-hdwallet-provider": "0.0.3",
     "openzeppelin-solidity": "^1.10.0"
   }
 }

@@ -20,7 +20,7 @@ npm install
 ```
 To test the contract
 ```sh
-truffle develop
+npm run develop
 test
 ```
 Use npm commands:
