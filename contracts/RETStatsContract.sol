@@ -38,7 +38,6 @@ contract RETStatsContract {
         uint256 start,
         uint256 end,
         uint256 sold,
-        uint256 softCap,
         uint256 hardCap,
         uint256 activeTier,
         uint256 tokensPerUSD,
@@ -56,7 +55,6 @@ contract RETStatsContract {
         start = crowdsale.startDate();
         end = crowdsale.endDate();
         sold = crowdsale.tokensSold();
-        softCap = crowdsale.softCap();
         hardCap = crowdsale.hardCap();
         (ethContr[0], ethContr[1], ethContr[2]) = strategy.getTokens(0x0, hardCap.sub(sold), sold, 1 ether, 0);
         (bthContr[0], bthContr[1], bthContr[2]) = strategy.getTokens(0x0, hardCap.sub(sold), sold, _ethPerBtc, 0);

@@ -35,7 +35,6 @@ async function deploy() {
         strategy.address,
         icoSince,
         icoTill,
-        new BigNumber('50000000000').mul(precision),
         new BigNumber('50000000000').mul(precision)
     );
 

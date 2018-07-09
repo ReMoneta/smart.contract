@@ -3,7 +3,6 @@ const utils = require('./utils')
 const BigNumber = require('bignumber.js')
 
 const Crowdsale = artifacts.require('crowdsale/CrowdsaleImpl')
-const RefundableCrowdsale = artifacts.require('test/RCrowdsaleTest')
 const MintableTokenAllocator = artifacts.require('allocator/MintableTokenAllocator')
 const USDDateTiersPricingStrategy = artifacts.require('pricing/USDDateTiersPricingStrategy')
 const DistributedDirectContributionForwarder = artifacts.require('contribution/DistributedDirectContributionForwarder')

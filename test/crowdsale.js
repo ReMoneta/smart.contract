@@ -32,7 +32,6 @@ async function deploy() {
         strategy.address,
         crowdsaleSince,
         crowdsaleTill,
-        new BigNumber('50000000000').mul(precision),
         new BigNumber('50000000000').mul(precision)
     );
 
@@ -76,12 +75,6 @@ contract('Token', function (accounts) {
 
      await Utils.checkState({crowdsale}, {
      crowdsale: {
-     softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-     contributorsWei: [
-     {[accounts[0]]: 0},
-     {[accounts[1]]: 0},
-     ],
-
      hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
      currentState: 0,
      allocator: allocator.address,
@@ -120,11 +113,6 @@ contract('Token', function (accounts) {
 
      await Utils.checkState({crowdsale}, {
      crowdsale: {
-     softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-     contributorsWei: [
-     {[accounts[0]]: 0},
-     {[accounts[1]]: 0},
-     ],
      hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
      currentState: 0,
      allocator: allocator.address,
@@ -168,12 +156,6 @@ contract('Token', function (accounts) {
      .then(Utils.receiptShouldSucceed)
      await Utils.checkState({crowdsale}, {
      crowdsale: {
-     softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-     contributorsWei: [
-     {[accounts[0]]: 0},
-     {[accounts[1]]: 0},
-     ],
-
      hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
      currentState: 1,
      allocator: allocator.address,
@@ -209,12 +191,6 @@ contract('Token', function (accounts) {
 
      await Utils.checkState({crowdsale}, {
      crowdsale: {
-     softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-     contributorsWei: [
-     {[accounts[0]]: 0},
-     {[accounts[1]]: 0},
-     ],
-
      hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
      currentState: 1,
      allocator: allocator.address,
@@ -266,7 +242,6 @@ contract('Token', function (accounts) {
                 strategy.address,
                 crowdsaleSince,
                 crowdsaleTill,
-                new BigNumber('50000000000').mul(precision),
                 new BigNumber('50000000000').mul(precision)
             );
 
@@ -310,11 +285,7 @@ contract('Token', function (accounts) {
                     owner: accounts[0]
                 },
                 crowdsale: {
-                    softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                    contributorsWei: [
-                        {[accounts[0]]: 0},
-                        {[accounts[3]]: new BigNumber('1.5').mul(precision)},
-                    ],
+
                     hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
                     currentState: 3,
                     allocator: allocator.address,
@@ -397,95 +368,6 @@ contract('Token', function (accounts) {
         })
 
     })
-    it('forwarder is not working till the softcap collected;', async function () {
-        const {
-            token,
-            allocator,
-            contributionForwarder,
-            strategy,
-            crowdsale,
-            agent
-        } = await deploy();
-        await crowdsale.setCrowdsaleAgent(agent.address, {from: accounts[0]});
-        await crowdsale.addSigner(signAddress);
-        await token.updateMintingAgent(allocator.address, true);
-        await allocator.addCrowdsales(crowdsale.address);
-        await token.updateBurnAgent(agent.address, true);
-        await token.updateLockupAgent(agent.address, true);
-
-        let ethBalance  = await Utils.getEtherBalance(web3.eth.accounts[9])
-        await Utils.checkEtherBalance(web3.eth.accounts[9], ethBalance)
-        await makeTransactionKYC(crowdsale, signAddress, accounts[3], new BigNumber('1.5').mul(precision))
-        // 1.5*750.45
-            .then(Utils.receiptShouldSucceed)
-        await Utils.checkEtherBalance(web3.eth.accounts[9], ethBalance)
-        await Utils.checkState({token, crowdsale}, {
-            token: {
-                // time: crowdsaleTill,
-                standard: 'ERC20 0.1',
-                maxSupply: new BigNumber('400000000000').mul(precision).valueOf(),
-                mintingAgents: [
-                    {[accounts[0]]: true},
-                    {[accounts[1]]: false},
-                ],
-                // disableMinting: false,
-                decimals: 18,
-                name: 'Remoneta ERC 20 Token',
-                symbol: 'RET',
-                balanceOf: [
-                    {[accounts[0]]: new BigNumber('0').mul(precision).valueOf()},
-                    {[accounts[1]]: new BigNumber('0').mul(precision).valueOf()},
-                    {[accounts[3]]: new BigNumber('0').mul(precision).valueOf()},
-                ],
-                intermediateBalances: [
-                    {[accounts[0]]: new BigNumber('0').mul(precision).valueOf()},
-                    {[accounts[1]]: new BigNumber('0').mul(precision).valueOf()},
-                    {[accounts[3]]: new BigNumber('11256750').mul(precision).valueOf()},
-                ],
-                totalSupply: new BigNumber('11256750').mul(precision).valueOf(),
-                owner: accounts[0]
-            },
-            crowdsale: {
-                softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                contributorsWei: [
-                    {[accounts[0]]: 0},
-                    {[accounts[3]]: new BigNumber('1.5').mul(precision)},
-                ],
-                hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                currentState: 3,
-                allocator: allocator.address,
-                contributionForwarder: contributionForwarder.address,
-                pricingStrategy: strategy.address,
-                crowdsaleAgent: agent.address,
-                finalized: false,
-                startDate: crowdsaleSince,
-                endDate: crowdsaleTill,
-                allowWhitelisted: true,
-                allowSigned: true,
-                allowAnonymous: false,
-                tokensSold: new BigNumber('11256750').mul(precision).valueOf(),
-                whitelisted: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                signers: [
-                    {[accounts[0]]: true},
-                    {[accounts[1]]: false},
-                ],
-                externalContributionAgents: [
-                    {[accounts[0]]: false},
-                    {[accounts[1]]: false},
-                ],
-                owner: accounts[0],
-                newOwner: 0x0,
-            }
-        });
-        await crowdsale.updateSoftCap(new BigNumber('21256750').mul(precision).valueOf())
-        await makeTransactionKYC(crowdsale, signAddress, accounts[3], new BigNumber('1.5').mul(precision))
-        // 1.5*750.45
-            .then(Utils.receiptShouldSucceed)
-        await Utils.checkEtherBalance(web3.eth.accounts[9], ethBalance.add(new BigNumber('3').mul(precision)))
-    })
     it('hardCap can be changed by Owner Only', async function () {
         const {
             token,
@@ -549,11 +431,6 @@ contract('Token', function (accounts) {
                 owner: accounts[0]
             },
             crowdsale: {
-                softCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
-                contributorsWei: [
-                    {[accounts[0]]: 0},
-                    {[accounts[3]]: new BigNumber('1.5').mul(precision)},
-                ],
                 hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
                 currentState: 3,
                 allocator: allocator.address,

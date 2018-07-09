@@ -77,7 +77,7 @@ module.exports = function (deployer, network, accounts) {
             DistributedDirectContributionForwarder.address,
             RETStrategy.address,
             preicoSince,preicoTill,
-            new BigNumber('50000000000').mul(precision), new BigNumber('50000000000').mul(precision)
+            new BigNumber('50000000000').mul(precision)
         );
     }).then(function (instance) {
         crowdsale = instance;
@@ -109,6 +109,12 @@ module.exports = function (deployer, network, accounts) {
         await allocation.setVestingStartDate(icoTill+thirtyDays)
         await allocation.setAddresses(team,advisory ,treasury ,earlyInvestors , bancor);
         await allocation.allocate(allocator.address, new BigNumber('50000').mul(precision))
+
+        await allocation.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
+        await token.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
+        await allocator.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
+        await strategy.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
+        await crowdsale.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
 
         return deployer.deploy(RETStatsContract, RETToken.address, RETCrowdSale.address);
     }).then(function (instance) {
