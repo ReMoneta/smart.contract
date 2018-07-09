@@ -52,4 +52,8 @@ contract RETCrowdSale is RefundableCrowdsale {
         updateState();
         super.internalContribution(_contributor, _wei);
     }
+
+    function internalRefund(address _holder) internal {
+        require(false);
+    }
 }
