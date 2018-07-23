@@ -1,5 +1,4 @@
-var
-    LockupContract = artifacts.require("./test/LockupContractTest.sol"),
+var LockupContract = artifacts.require("./test/LockupContractTest.sol"),
     Utils = require("./utils"),
     BigNumber = require('bignumber.js');
 

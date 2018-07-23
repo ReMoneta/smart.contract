@@ -65,7 +65,7 @@ contract TokenAllocation is Ownable, Referral {
         advisory = _advisory;
         treasury = _treasury;
         earlyInvestors = _earlyInvestors;
-        _bancor = _bancor;
+        bancor = _bancor;
     }
 
     function sendBancorTokens(MintableTokenAllocator _allocator) public onlyOwner {
