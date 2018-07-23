@@ -27,7 +27,7 @@ async function deploy() {
     const token = await RETToken.new(icoTill);
     const allocator = await MintableTokenAllocator.new(token.address);
     const contributionForwarder = await DistributedDirectContributionForwarder.new(100, [etherHolder], [100]);
-    const strategy = await RETStrategy.new([], [icoSince, icoSince+1],[icoSince+10, icoSince+50], 75045000);
+    const strategy = await RETStrategy.new([], [icoSince, icoSince+1], 75045000);
 
     const crowdsale = await RETCrowdSale.new(
         allocator.address,
@@ -35,7 +35,7 @@ async function deploy() {
         strategy.address,
         icoSince,
         icoTill,
-        new BigNumber('50000000000').mul(precision)
+        new BigNumber('52500000000').mul(precision)
     );
 
     const agent = await RETAgent.new(crowdsale.address, token.address);

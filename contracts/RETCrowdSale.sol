@@ -21,7 +21,7 @@ contract RETCrowdSale is HardCappedCrowdsale {
         USDDateTiersPricingStrategy _pricingStrategy,
         uint256 _startTime,
         uint256 _endTime,
-        uint256 _hardCap // (5000000/ 0.01)*100*10^18
+        uint256 _hardCap // 52 500 000 000*10^18
     ) public HardCappedCrowdsale(
         _allocator,
         _contributionForwarder,

@@ -32,15 +32,15 @@ contract TokenAllocation is Ownable, Referral {
         require(address(0) != address(_crowdsale));
         crowdsale = RETCrowdSale(_crowdsale);
         pricingStrategy = RETStrategy(address(crowdsale.pricingStrategy()));
-        uint256[12] memory tiersData = pricingStrategy.getArrayOfTiers();
-        vestingStartDate = tiersData[11].add(30 days);
+        uint256[6] memory tiersData = pricingStrategy.getArrayOfTiers();
+        vestingStartDate = tiersData[5].add(30 days);
     }
 
     function setCrowdsale(address _crowdsale) public onlyOwner {
         super.setCrowdsale(_crowdsale);
         pricingStrategy = RETStrategy(crowdsale.pricingStrategy());
-        uint256[12] memory tiersData = pricingStrategy.getArrayOfTiers();
-        vestingStartDate = tiersData[11].add(30 days);
+        uint256[6] memory tiersData = pricingStrategy.getArrayOfTiers();
+        vestingStartDate = tiersData[5].add(30 days);
     }
 
     function setVestingStartDate(uint256 _vestingStartDate) public onlyOwner {

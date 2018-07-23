@@ -26,7 +26,7 @@ async function deploy() {
     const token = await RETToken.new(icoTill);
     const allocator = await MintableTokenAllocator.new(token.address);
     const contributionForwarder = await DistributedDirectContributionForwarder.new(100, [etherHolder], [100]);
-    const strategy = await RETStrategy.new([], [icoSince, icoTill],[icoTill, icoTill+3600], 75045000);
+    const strategy = await RETStrategy.new([], [icoSince, icoTill], 75045000);
 
     const crowdsale = await RETCrowdSale.new(
         allocator.address,
@@ -34,7 +34,7 @@ async function deploy() {
         strategy.address,
         icoSince,
         icoTill,
-        new BigNumber('50000000000').mul(precision)
+        new BigNumber('52500000000').mul(precision)
         );
 
 
@@ -129,13 +129,13 @@ contract('Token', function (accounts) {
             .then(Utils.receiptShouldSucceed)
         assert.equal(new BigNumber(await token.totalSupply.call()).valueOf(), new BigNumber('15009000').mul(precision).valueOf(), "state doesn't match");
 
-        await strategy.updateDates(0, icoSince - 3600 * 2, icoSince - 3600);
+        await strategy.updateDates(0, icoTill , icoTill + 3600 * 2);
         await crowdsale.updateState();
 
         currentState = await crowdsale.getState.call()//BeforeCrowdsale
         assert.equal(currentState, 2, "state doesn't match");
 
-        await strategy.updateDates(1, icoSince, icoTill);
+        await strategy.updateDates(0, icoSince, icoTill);
         await crowdsale.updateState();
 
         currentState = await crowdsale.getState.call()//InCrowdsale

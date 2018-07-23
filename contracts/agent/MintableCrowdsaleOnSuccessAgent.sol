@@ -51,7 +51,7 @@ contract MintableCrowdsaleOnSuccessAgent is CrowdsaleAgent {
     /// @param _state Crowdsale.State
     function onStateChange(Crowdsale.State _state) public onlyCrowdsale() {
         if (_state == Crowdsale.State.Success) {
-            token.disableMinting();
+//            token.disableMinting();
         }
     }
 }

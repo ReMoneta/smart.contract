@@ -24,7 +24,7 @@ async function deploy() {
     const token = await RETToken.new(crowdsaleTill);
     const allocator = await MintableTokenAllocator.new(token.address);
     const contributionForwarder = await DistributedDirectContributionForwarder.new(100, [etherHolder], [100]);
-    const strategy = await RETStrategy.new([], [crowdsaleSince, crowdsaleTill], [crowdsaleTill, crowdsaleTill + 3600], 75045000);
+    const strategy = await RETStrategy.new([], [crowdsaleSince, crowdsaleTill], 75045000);
 
     const crowdsale = await RETCrowdSale.new(
         allocator.address,
@@ -32,7 +32,7 @@ async function deploy() {
         strategy.address,
         crowdsaleSince,
         crowdsaleTill,
-        new BigNumber('50000000000').mul(precision)
+        new BigNumber('52500000000').mul(precision)
     );
 
     const agent = await RETAgent.new([crowdsale.address], token.address);
@@ -185,7 +185,7 @@ contract('Token', function (accounts) {
      newOwner: 0x0,
      }
      });
-     await strategy.updateDates(0, crowdsaleSince-5, crowdsaleSince)
+     await strategy.updateDates(0, crowdsaleTill, crowdsaleTill + 3600)
      await crowdsale.updateState()
      .then(Utils.receiptShouldSucceed)
 
@@ -234,7 +234,7 @@ contract('Token', function (accounts) {
             token = await RETToken.new(crowdsaleTill);
             allocator = await MintableTokenAllocator.new(token.address);
             contributionForwarder = await DistributedDirectContributionForwarder.new(100, [etherHolder], [100]);
-            strategy = await RETStrategy.new([], [crowdsaleSince, crowdsaleTill], [crowdsaleTill, crowdsaleTill + 3600], 75045000);
+            strategy = await RETStrategy.new([], [crowdsaleSince, crowdsaleTill], 75045000);
 
             crowdsale = await RETCrowdSale.new(
                 allocator.address,
@@ -242,7 +242,7 @@ contract('Token', function (accounts) {
                 strategy.address,
                 crowdsaleSince,
                 crowdsaleTill,
-                new BigNumber('50000000000').mul(precision)
+                new BigNumber('52500000000').mul(precision)
             );
 
             agent = await RETAgent.new([crowdsale.address], token.address);
@@ -327,23 +327,21 @@ contract('Token', function (accounts) {
                 .then(Utils.receiptShouldFailed)
                 .catch(Utils.catchReceiptShouldFailed);
         })
-        it('less than  min purchase  should fail (100$ and 10$)', async function () {
+        it('less than  min purchase  should fail (100$)', async function () {
             await makeTransactionKYC(crowdsale, signAddress, accounts[8], new BigNumber('0.12').mul(precision))
                 .then(Utils.receiptShouldFailed)
                 .catch(Utils.catchReceiptShouldFailed);
             await makeTransactionKYC(crowdsale, signAddress, accounts[8], new BigNumber('0.2').mul(precision))
                 .then(Utils.receiptShouldSucceed)
             await strategy.updateDates(0, crowdsaleTill-5, crowdsaleTill)
-            await strategy.updateDates(1, crowdsaleSince, crowdsaleTill)
-            await makeTransactionKYC(crowdsale, signAddress, accounts[8], new BigNumber('0.012').mul(precision))
+
+            await makeTransactionKYC(crowdsale, signAddress, accounts[8], new BigNumber('0.2').mul(precision))
                 .then(Utils.receiptShouldFailed)
                 .catch(Utils.catchReceiptShouldFailed);
-            await makeTransactionKYC(crowdsale, signAddress, accounts[8], new BigNumber('0.02').mul(precision))
-                .then(Utils.receiptShouldSucceed)
+
         })
         it('outdated  should fail', async function () {
             await strategy.updateDates(0, crowdsaleTill-5, crowdsaleTill)
-            await strategy.updateDates(1, crowdsaleTill-5, crowdsaleTill)
 
             await makeTransactionKYC(crowdsale, signAddress, accounts[8], new BigNumber('5').mul(precision))
                 .then(Utils.receiptShouldFailed)
@@ -351,7 +349,6 @@ contract('Token', function (accounts) {
         })
         it('before sale period  should fail', async function () {
             await strategy.updateDates(0, crowdsaleSince-5, crowdsaleSince)
-            await strategy.updateDates(1, crowdsaleSince-5, crowdsaleSince)
 
             await makeTransactionKYC(crowdsale, signAddress, accounts[8], new BigNumber('5').mul(precision))
                 .then(Utils.receiptShouldFailed)

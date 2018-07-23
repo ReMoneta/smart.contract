@@ -43,11 +43,11 @@ contract RETStatsContract {
         uint256 tokensPerUSD,
         uint256[3] ethContr, //tokensPerEth, shares,
         uint256[3] bthContr, // tokensPerBtc, shares,
-        uint256[12] tiersData
+        uint256[6] tiersData
     ) {
         activeTier = strategy.getTierIndex(0);
         tiersData = strategy.getArrayOfTiers();
-        if (activeTier.mul(6).add(3) >= 12) {
+        if (activeTier.mul(6).add(3) >= 6) {
             tokensPerUSD = 0;
         } else {
             tokensPerUSD = tiersData[activeTier.mul(6)];

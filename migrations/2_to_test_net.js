@@ -11,10 +11,8 @@ const SafeMath = artifacts.require("./../node_modules/zeppelin-solidity/contract
 
 const BigNumber = require('bignumber.js');
 module.exports = function (deployer, network, accounts) {
-    let preicoSince = 1532426400, //07/24/2018 @ 10:00am (UTC)
+    let preicoSince = 1532415600, //07/24/2018 @ 7:00am (UTC)
         preicoTill = 1541030340, //10/31/2018 @ 11:59pm (UTC)
-        icoSince = 1541030400, //11/01/2018 @ 12:00am (UTC)
-        icoTill = 1546214400, //12/31/2018 @ 12:00am (UTC)
         thirtyDays = 2592000,
 
         precision = "1000000000000000000",
@@ -52,7 +50,7 @@ module.exports = function (deployer, network, accounts) {
     allocation,
     stats;
     deployer.then(function () {
-        return deployer.deploy(RETToken, icoTill + thirtyDays);
+        return deployer.deploy(RETToken, preicoTill + thirtyDays);
     }).then(function (instance) {
         token = instance;
         console.log('token', token.address);
@@ -67,7 +65,7 @@ module.exports = function (deployer, network, accounts) {
         contributionForwarder = instance;
         console.log('contributionForwarder', contributionForwarder.address);
 
-        return deployer.deploy(RETStrategy, [],[preicoSince,preicoTill],[icoSince,icoTill], 45045000);
+        return deployer.deploy(RETStrategy, [],[preicoSince,preicoTill], 45045000);
     }).then(function (instance) {
         strategy = instance;
         console.log('strategy', strategy.address);
@@ -77,7 +75,7 @@ module.exports = function (deployer, network, accounts) {
             DistributedDirectContributionForwarder.address,
             RETStrategy.address,
             preicoSince,preicoTill,
-            new BigNumber('50000000000').mul(precision)
+            new BigNumber('52500000000').mul(precision)
         );
     }).then(function (instance) {
         crowdsale = instance;
@@ -106,7 +104,7 @@ module.exports = function (deployer, network, accounts) {
         await allocator.addCrowdsales(tokenAllocation.address);
         await allocator.addCrowdsales(crowdsale.address);
 
-        await allocation.setVestingStartDate(icoTill+thirtyDays)
+        await allocation.setVestingStartDate(preicoTill+thirtyDays)
         await allocation.setAddresses(team,advisory ,treasury ,earlyInvestors , bancor);
         await allocation.allocate(allocator.address, new BigNumber('50000').mul(precision))
 
