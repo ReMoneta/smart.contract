@@ -75,7 +75,7 @@ contract('Token', function (accounts) {
 
      await Utils.checkState({crowdsale}, {
      crowdsale: {
-     hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     hardCap: new BigNumber('52500000000').mul(precision).valueOf(),
      currentState: 0,
      allocator: allocator.address,
      contributionForwarder: contributionForwarder.address,
@@ -113,7 +113,7 @@ contract('Token', function (accounts) {
 
      await Utils.checkState({crowdsale}, {
      crowdsale: {
-     hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     hardCap: new BigNumber('52500000000').mul(precision).valueOf(),
      currentState: 0,
      allocator: allocator.address,
      contributionForwarder: contributionForwarder.address,
@@ -156,7 +156,7 @@ contract('Token', function (accounts) {
      .then(Utils.receiptShouldSucceed)
      await Utils.checkState({crowdsale}, {
      crowdsale: {
-     hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     hardCap: new BigNumber('52500000000').mul(precision).valueOf(),
      currentState: 1,
      allocator: allocator.address,
      contributionForwarder: contributionForwarder.address,
@@ -191,7 +191,7 @@ contract('Token', function (accounts) {
 
      await Utils.checkState({crowdsale}, {
      crowdsale: {
-     hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+     hardCap: new BigNumber('52500000000').mul(precision).valueOf(),
      currentState: 1,
      allocator: allocator.address,
      contributionForwarder: contributionForwarder.address,
@@ -286,7 +286,7 @@ contract('Token', function (accounts) {
                 },
                 crowdsale: {
 
-                    hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+                    hardCap: new BigNumber('52500000000').mul(precision).valueOf(),
                     currentState: 3,
                     allocator: allocator.address,
                     contributionForwarder: contributionForwarder.address,
@@ -355,9 +355,9 @@ contract('Token', function (accounts) {
                 .catch(Utils.catchReceiptShouldFailed);
         })
         it('tokens less than for all tiers  should fail', async function () {
-            await token.mint(accounts[6], new BigNumber('49999999000').mul(precision).valueOf())
+            await token.mint(accounts[6], new BigNumber('52499999000').mul(precision).valueOf())
                 .then(Utils.receiptShouldSucceed)
-            await crowdsale.updateSoldTokens(new BigNumber('49999999000').mul(precision).valueOf())
+            await crowdsale.updateSoldTokens(new BigNumber('52499999000').mul(precision).valueOf())
 
             await makeTransactionKYC(crowdsale, signAddress, accounts[8], new BigNumber('5').mul(precision))
                 .then(Utils.receiptShouldFailed)
@@ -428,7 +428,7 @@ contract('Token', function (accounts) {
                 owner: accounts[0]
             },
             crowdsale: {
-                hardCap: new BigNumber('5000000').mul(100).mul(100).mul(precision).valueOf(),
+                hardCap: new BigNumber('52500000000').mul(precision).valueOf(),
                 currentState: 3,
                 allocator: allocator.address,
                 contributionForwarder: contributionForwarder.address,
