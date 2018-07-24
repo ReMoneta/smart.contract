@@ -18,7 +18,6 @@ contract MintableCrowdsaleOnSuccessAgent is CrowdsaleAgent {
 
     constructor(Crowdsale _crowdsale, MintableToken _token)
     public CrowdsaleAgent(_crowdsale) {
-        crowdsale = _crowdsale;
         token = _token;
 
         if (address(0) != address(_token) && address(0) != address(_crowdsale)) {

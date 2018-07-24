@@ -23,7 +23,8 @@ module.exports = function (deployer, network, accounts) {
         treasury = "0xc5fdf4076b8f3a5357c5e395ab970b5b54098fef".toLowerCase(),
         earlyInvestors = "0x821aea9a577a9b44299b9c15c88cf3087f3b5544".toLowerCase(),
         bancor = "0x0f4f2ac550a1b4e2280d04c21cea7ebd822934b5".toLowerCase(),
-        bonusHolder =treasury;
+        bonusHolder =treasury,
+        owner = "0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase(),
         etherHolder = "0x4dD93664e39FbB2A229E6A88eb1Da53f4ccc88Ac".toLowerCase(),
         signAddress = "0x0f84bdb7d3394bb903a5d53522479fa7076ff3d1".toLowerCase()
 
@@ -109,11 +110,11 @@ module.exports = function (deployer, network, accounts) {
         // await allocation.allocate(allocator.address) //
         // needs to be run maulaly after all referrals allocated to include bonuses
 
-        await allocation.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
-        await token.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
-        await allocator.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
-        await strategy.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
-        await crowdsale.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
+        await allocation.transferOwnership(owner)
+        await token.transferOwnership(owner)
+        await allocator.transferOwnership(owner)
+        await strategy.transferOwnership(owner)
+        await crowdsale.transferOwnership(owner)
 
         return deployer.deploy(RETStatsContract, RETToken.address, RETCrowdSale.address);
     }).then(function (instance) {
