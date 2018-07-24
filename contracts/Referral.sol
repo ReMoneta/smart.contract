@@ -13,8 +13,6 @@ contract Referral is Ownable {
     MintableTokenAllocator public allocator;
     CrowdsaleImpl public crowdsale;
 
-    uint256 public constant DECIMALS = 18;
-
     uint256 public totalSupply;
     bool public unLimited;
     bool public sentOnce;
@@ -63,7 +61,6 @@ contract Referral is Ownable {
             claimed[_address] = true;
 
         }
-        _amount = _amount.mul(10 ** DECIMALS);
         require(
             _address == msg.sender &&
             _amount > 0 &&

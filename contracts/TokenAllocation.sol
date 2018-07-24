@@ -28,7 +28,7 @@ contract TokenAllocation is Ownable, Referral {
     event BonusSent(address receiver, uint256 amount);
     event ReferralSent(address receiver, uint256 amount);
 
-    constructor(RETCrowdSale _crowdsale, address _allocator) public Referral(0, _allocator, _crowdsale, false) {
+    constructor(RETCrowdSale _crowdsale, address _allocator) public Referral(0, _allocator, _crowdsale, true) {
         require(address(0) != address(_crowdsale));
         crowdsale = RETCrowdSale(_crowdsale);
         pricingStrategy = RETStrategy(address(crowdsale.pricingStrategy()));
@@ -71,15 +71,17 @@ contract TokenAllocation is Ownable, Referral {
     function sendBancorTokens(MintableTokenAllocator _allocator) public onlyOwner {
         require(tokenInited[bancor] == false && bancor != address(0));
         tokenInited[bancor] = true;
-        _allocator.allocate(bancor, uint256(20000000000).mul(uint256(10) ** uint256(18)));
+        RETToken token = RETToken(address(_allocator.token()));
+        _allocator.allocate(bancor, uint256(20000000000).mul(uint256(10) ** token.decimals()));
     }
 
     function allocate(MintableTokenAllocator _allocator, uint256 _bonusAmount) public onlyOwner() {
         require(tokenInited[address(_allocator.token)] == false);
+        require(vestingStartDate <= block.timestamp);
 
         tokenInited[address(_allocator.token)] = true;
-
-        uint256 tokenPrecision = uint256(10) ** uint256(18);
+        RETToken token = RETToken(address(_allocator.token()));
+        uint256 tokenPrecision = uint256(10) ** token.decimals();
 
         // sold  tokens  +  bonuses
         uint256 soldTokens = crowdsale.tokensSold().add(_bonusAmount);
@@ -100,7 +102,7 @@ contract TokenAllocation is Ownable, Referral {
             _allocator,
             soldTokens.mul(4).div(100),
             vestingStartDate,
-            uint256(365 days).mul(2), //2 years
+            720 days,
             50,
             30 days
         );
@@ -133,7 +135,7 @@ contract TokenAllocation is Ownable, Referral {
             emit ReferralSent(_address, _amount[2]);
         }
         RETToken token = RETToken(address(_allocator.token()));
-        token.setClaimState(_address, true);
+        token.setKYCState(_address, true);
     }
 
     function vestingMint(
@@ -169,6 +171,6 @@ contract TokenAllocation is Ownable, Referral {
         RETToken token = RETToken(address(_allocator.token()));
         token.allocationLog(_address, _amount, _startingAt, _lockPeriod, _initialUnlock, _releasePeriod);
         _allocator.allocate(_address, _amount);
-        token.setClaimState(_address, true);
+        token.setKYCState(_address, true);
     }
 }

@@ -47,10 +47,10 @@ contract RETStatsContract {
     ) {
         activeTier = strategy.getTierIndex(0);
         tiersData = strategy.getArrayOfTiers();
-        if (activeTier.mul(6).add(3) >= 6) {
+        if (activeTier > 0) {
             tokensPerUSD = 0;
         } else {
-            tokensPerUSD = tiersData[activeTier.mul(6)];
+            tokensPerUSD = tiersData[activeTier];
         }
         start = crowdsale.startDate();
         end = crowdsale.endDate();

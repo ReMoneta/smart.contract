@@ -178,7 +178,7 @@ contract('Token', function (accounts) {
         await Utils.balanceShouldEqualTo(token, accounts[3], 0)
         await token.setUnlockTime(icoSince)
         await Utils.balanceShouldEqualTo(token, accounts[3], 0)
-        await token.setClaimState(accounts[3], true);
+        await token.setKYCState(accounts[3], true);
         await token.transfer(accounts[2], 100, {from:accounts[3]})
             .then(Utils.receiptShouldSucceed)
         await token.setUnlockTime(icoTill)

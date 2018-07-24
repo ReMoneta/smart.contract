@@ -11,7 +11,7 @@ import './AllocationLockupContract.sol';
 contract RETToken is TimeLockedToken, LockupContract, AllocationLockupContract, OpenZeppelinERC20, BurnableToken, MintableToken {
 
     mapping(address => uint256) public intermediateBalances;
-    mapping(address => bool) public claimed;
+    mapping(address => bool) public kycVerified;
 
     modifier isTimeLocked(address _holder, bool _timeLocked) {
         bool locked = (block.timestamp < time);
@@ -37,8 +37,8 @@ contract RETToken is TimeLockedToken, LockupContract, AllocationLockupContract, 
         maxSupply = _newMaxSupply;
     }
 
-    function setClaimState(address _holder, bool _state) public onlyMintingAgents {
-        claimed[_holder] = _state;
+    function setKYCState(address _holder, bool _state) public onlyMintingAgents {
+        kycVerified[_holder] = _state;
     }
 
     function transfer(address _to, uint256 _value) public returns (bool) {
@@ -79,7 +79,7 @@ contract RETToken is TimeLockedToken, LockupContract, AllocationLockupContract, 
     }
 
     function balanceOf(address _owner) public view returns (uint256 balance) {
-        if (excludedAddresses[_owner] == true || (time <= block.timestamp && claimed[_owner] == true)) {
+        if (excludedAddresses[_owner] == true || (time <= block.timestamp && kycVerified[_owner] == true)) {
             return super.balanceOf(_owner);
         }
         return 0;

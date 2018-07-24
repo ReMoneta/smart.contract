@@ -102,7 +102,10 @@ contract('Allocation', function (accounts) {
         await token.updateLockupAgent(allocation.address,true);
         // await allocation.setVestingStartDate(icoTill)
         await allocation.setAddresses(accounts[6],accounts[7],accounts[8],accounts[9],accounts[5]);
-
+        await allocation.allocate(allocator.address, new BigNumber(20).mul(precision))
+            .then(Utils.receiptShouldFailed)
+            .catch(Utils.catchReceiptShouldFailed);
+        await allocation.setVestingStartDate(icoSince)
         await allocation.allocate(allocator.address, new BigNumber(20).mul(precision))
             .then(Utils.receiptShouldSucceed)
         await allocation.allocate(allocator.address, new BigNumber(20).mul(precision))
@@ -128,9 +131,6 @@ contract('Allocation', function (accounts) {
         // await allocation.setVestingStartDate(icoTill)
         await allocation.setAddresses(accounts[6],accounts[7],accounts[8],accounts[9],accounts[5]);
 
-        await allocation.allocate(allocator.address,new BigNumber(20).mul(precision))
-            .then(Utils.receiptShouldSucceed)
-
         await  allocation.vestingMint(accounts[0],allocator.address, 1000, icoTill, 31556926,0, 3,{from: accounts[1]})
             .then(Utils.receiptShouldFailed)
             .catch(Utils.catchReceiptShouldFailed);
@@ -149,10 +149,14 @@ contract('Allocation', function (accounts) {
          starting = parseInt(new Date().getTime() / 1000) - 1
         await  allocation.vestingMint(accounts[2],allocator.address, 100, starting, 60, 0, 30)
             .then(Utils.receiptShouldSucceed)
-        console.log(await token.lockedAmount.call(accounts[2],4));
-        console.log(await token.lockedAmount.call(accounts[2],5));
-        console.log(await token.lockedAmount.call(accounts[2],6));
-        console.log(await token.lockedAmount.call(accounts[2],7));
+        console.log(await token.lockedAllocationAmount.call(accounts[2],4));
+        console.log(await token.lockedAllocationAmount.call(accounts[2],5));
+        console.log(await token.lockedAllocationAmount.call(accounts[2],6));
+        console.log(await token.lockedAllocationAmount.call(accounts[2],7));
+
+        await allocation.setVestingStartDate(icoSince)
+        await allocation.allocate(allocator.address,new BigNumber(20).mul(precision))
+            .then(Utils.receiptShouldSucceed)
 
         console.log('bal',new BigNumber(await token.allowedBalance.call(
             accounts[2],
@@ -166,6 +170,8 @@ contract('Allocation', function (accounts) {
             200
         )
         await assert.equal((result).valueOf(), true, "isTransferAllowed is not equal")
+
+
     });
     it("t", async function () {
         const {

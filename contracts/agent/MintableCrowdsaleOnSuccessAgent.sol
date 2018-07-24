@@ -13,7 +13,6 @@ import '../token/erc20/MintableToken.sol';
 contract MintableCrowdsaleOnSuccessAgent is CrowdsaleAgent {
 
 
-    Crowdsale public crowdsale;
     MintableToken public token;
     bool public _isInitialized;
 
@@ -22,8 +21,7 @@ contract MintableCrowdsaleOnSuccessAgent is CrowdsaleAgent {
         crowdsale = _crowdsale;
         token = _token;
 
-        if (address(0) != address(_token) &&
-        address(0) != address(_crowdsale)) {
+        if (address(0) != address(_token) && address(0) != address(_crowdsale)) {
             _isInitialized = true;
         } else {
             _isInitialized = false;

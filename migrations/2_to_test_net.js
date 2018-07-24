@@ -106,7 +106,8 @@ module.exports = function (deployer, network, accounts) {
 
         await allocation.setVestingStartDate(preicoTill+thirtyDays)
         await allocation.setAddresses(team,advisory ,treasury ,earlyInvestors , bancor);
-        await allocation.allocate(allocator.address, new BigNumber('50000').mul(precision))
+        // await allocation.allocate(allocator.address) //
+        // needs to be run maulaly after all referrals allocated to include bonuses
 
         await allocation.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
         await token.transferOwnership("0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase())
