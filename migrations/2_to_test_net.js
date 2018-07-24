@@ -18,15 +18,15 @@ module.exports = function (deployer, network, accounts) {
         precision = "1000000000000000000",
         usdPrecision = "100000",
 
-        team = "0x627306090abab3a6e1400e9345bc60c78a8bef57".toLowerCase(),
-        advisory = "0xf17f52151ebef6c7334fad080c5704d77216b732".toLowerCase(),
-        treasury = "0xc5fdf4076b8f3a5357c5e395ab970b5b54098fef".toLowerCase(),
-        earlyInvestors = "0x821aea9a577a9b44299b9c15c88cf3087f3b5544".toLowerCase(),
-        bancor = "0x0f4f2ac550a1b4e2280d04c21cea7ebd822934b5".toLowerCase(),
-        bonusHolder =treasury,
-        owner = "0x6DFF9C7c1a821190c9f3b34A835A01Dd58C90AF0".toLowerCase(),
-        etherHolder = "0x4dD93664e39FbB2A229E6A88eb1Da53f4ccc88Ac".toLowerCase(),
-        signAddress = "0x0f84bdb7d3394bb903a5d53522479fa7076ff3d1".toLowerCase()
+        team = "0xb5F1ebd41b4f029c5Cd1c4156C5728Db445649F2".toLowerCase(),
+        advisory = "0x49A54Ff6466764A91dF9B8a90Da04A39908ACE0e".toLowerCase(),
+        treasury = "0xb4536A3db4fcb582477c8F2feD443353510A85De".toLowerCase(),
+        earlyInvestors = "0x0325cA441651043a870D78c09c0C77fEc0221619".toLowerCase(),
+        bancor = "0xb4536A3db4fcb582477c8F2feD443353510A85De".toLowerCase(),
+
+        owner = "0xf6d74C08ec51acbfCBD7e96E9c5bF334e1390dA2".toLowerCase(),
+        etherHolder = "0x4052B89894aD5b10DcB7aA3E570aEc193c3ef6B9".toLowerCase(),
+        signAddress = "0x4758b9aaf8ce6479e38ea3da5bfdefcfa798fac2".toLowerCase()
 
     deployer.deploy(SafeMath, {overwrite: false});
 
@@ -97,7 +97,7 @@ module.exports = function (deployer, network, accounts) {
         await token.updateLockupAgent(agent.address, true);
         await token.updateLockupAgent(tokenAllocation.address,true);
         await token.updateMintingAgent(tokenAllocation.address, true);
-        await token.updateExcludedAddress(bonusHolder, true)
+        // await token.updateExcludedAddress(bonusHolder, true) //if it is needed
         await crowdsale.setCrowdsaleAgent(agent.address);
         await crowdsale.addSigner(signAddress);
         await crowdsale.addExternalContributor(signAddress)

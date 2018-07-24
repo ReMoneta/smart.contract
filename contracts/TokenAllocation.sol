@@ -14,11 +14,11 @@ contract TokenAllocation is Ownable, Referral {
     uint256 public constant TREASURY_TOKENS = 20000000000e18;
     uint256 public constant BANCOR_TOKENS = 20000000000e18;
 
-    address public team = 0x0;
-    address public advisory = 0x0;
-    address public treasury = 0x0;
-    address public earlyInvestors = 0x0;
-    address public bancor = 0x0;
+    address public team = 0xb5F1ebd41b4f029c5Cd1c4156C5728Db445649F2;
+    address public advisory = 0x49A54Ff6466764A91dF9B8a90Da04A39908ACE0e;
+    address public treasury = 0xb4536A3db4fcb582477c8F2feD443353510A85De;
+    address public earlyInvestors = 0x0325cA441651043a870D78c09c0C77fEc0221619;
+    address public bancor = 0xb4536A3db4fcb582477c8F2feD443353510A85De;
 
     RETCrowdSale public crowdsale;
     RETStrategy public pricingStrategy;
