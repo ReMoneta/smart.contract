@@ -8,8 +8,6 @@ contract RETAgent is MintableCrowdsaleOnSuccessAgent {
 
 
     constructor(Crowdsale _crowdsale, RETToken _token) public MintableCrowdsaleOnSuccessAgent(_crowdsale, _token) {
-        token = _token;
-
         if (address(0) != address(_token) && address(0) != address(_crowdsale)) {
             _isInitialized = true;
         } else {

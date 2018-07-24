@@ -12,4 +12,10 @@ function onRefund(address _contributor, uint256 _tokens) public onlyCrowdsale() 
 _contributor = _contributor;
 _tokens = _tokens;
 }
+    function onContribution(address, uint256, uint256, uint256)
+    public onlyCrowdsale() {
+    }
+
+    function onStateChange(Crowdsale.State) public onlyCrowdsale() {
+    }
 }

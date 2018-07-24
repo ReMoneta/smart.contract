@@ -79,7 +79,7 @@ contract RETToken is TimeLockedToken, LockupContract, AllocationLockupContract, 
     }
 
     function balanceOf(address _owner) public view returns (uint256 balance) {
-        if (excludedAddresses[_owner] == true || (time <= block.timestamp && kycVerified[_owner] == true)) {
+        if (excludedAddresses[_owner] == true || (kycVerified[_owner] == true)) {
             return super.balanceOf(_owner);
         }
         return 0;
