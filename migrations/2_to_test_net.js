@@ -66,7 +66,7 @@ module.exports = function (deployer, network, accounts) {
         contributionForwarder = instance;
         console.log('contributionForwarder', contributionForwarder.address);
 
-        return deployer.deploy(RETStrategy, [],[preicoSince,preicoTill], 45045000);
+        return deployer.deploy(RETStrategy, [],[preicoSince,preicoTill], 47426000);
     }).then(function (instance) {
         strategy = instance;
         console.log('strategy', strategy.address);
