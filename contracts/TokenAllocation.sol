@@ -11,6 +11,9 @@ contract TokenAllocation is Ownable, Referral {
 
     using SafeMath for uint256;
 
+    uint256 public constant TREASURY_TOKENS = 20000000000e18;
+    uint256 public constant BANCOR_TOKENS = 20000000000e18;
+
     address public team = 0x0;
     address public advisory = 0x0;
     address public treasury = 0x0;
@@ -72,7 +75,7 @@ contract TokenAllocation is Ownable, Referral {
         require(tokenInited[bancor] == false && bancor != address(0));
         tokenInited[bancor] = true;
         RETToken token = RETToken(address(_allocator.token()));
-        _allocator.allocate(bancor, uint256(20000000000).mul(uint256(10) ** token.decimals()));
+        _allocator.allocate(bancor, BANCOR_TOKENS);
     }
 
     function allocate(MintableTokenAllocator _allocator, uint256 _bonusAmount) public onlyOwner() {
@@ -80,8 +83,6 @@ contract TokenAllocation is Ownable, Referral {
         require(vestingStartDate <= block.timestamp);
 
         tokenInited[address(_allocator.token)] = true;
-        RETToken token = RETToken(address(_allocator.token()));
-        uint256 tokenPrecision = uint256(10) ** token.decimals();
 
         // sold  tokens  +  bonuses
         uint256 soldTokens = crowdsale.tokensSold().add(_bonusAmount);
@@ -115,7 +116,7 @@ contract TokenAllocation is Ownable, Referral {
             50,
             30 days
         );
-        _allocator.allocate(treasury, uint256(20000000000).mul(tokenPrecision));
+        _allocator.allocate(treasury, TREASURY_TOKENS);
     }
 
     function multivestMint(

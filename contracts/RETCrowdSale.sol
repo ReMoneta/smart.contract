@@ -11,7 +11,6 @@ contract RETCrowdSale is HardCappedCrowdsale {
     USDDateTiersPricingStrategy public pricingStrategy;
 
     uint256 public constant PRE_ICO_TIER = 0;
-    uint256 public constant ICO_TIER = 1;
 
     uint256 public  activeTier;
 
